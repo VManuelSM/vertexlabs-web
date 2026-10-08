@@ -1,0 +1,191 @@
+/* Ilustración: geometría propia en px; colores, radios y materiales siempre desde tokens. */
+
+.device {
+  transition: transform 0.5s ease;
+  animation: hover-float 9s ease-in-out infinite;
+}
+
+/* Inclinación 3D solo cuando la maqueta va al lado del texto (lg = 920 px). */
+@media (width >= 57.5rem) {
+  .device {
+    transform: rotateY(-9deg) rotateX(4deg) rotate(1deg);
+  }
+
+  :host(:hover) .device {
+    transform: rotateY(-3deg) rotateX(1deg);
+  }
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--glass-strong);
+}
+
+.bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  opacity: 0.5;
+}
+
+.url {
+  margin-left: 10px;
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--ink-3) 12%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-3);
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--aurora-1) 10%, transparent),
+    transparent 40%
+  );
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  background: linear-gradient(140deg, var(--brand), var(--brand-strong));
+}
+
+.line {
+  height: 6px;
+  border-radius: var(--radius-xs);
+  background: var(--ink-3);
+  opacity: 0.3;
+}
+
+.pill {
+  margin-left: auto;
+  width: 52px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--brand);
+  opacity: 0.9;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.heading {
+  height: 12px;
+  border-radius: 5px;
+  background: var(--ink);
+  opacity: 0.82;
+}
+
+.text {
+  height: 6px;
+  border-radius: var(--radius-xs);
+  background: var(--ink-3);
+  opacity: 0.35;
+}
+
+.heading.short {
+  width: 70%;
+}
+
+.text.short {
+  width: 85%;
+}
+
+.cta {
+  margin-top: 6px;
+  width: 96px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(120deg, var(--brand), var(--brand-strong));
+  box-shadow: 0 6px 14px -6px var(--brand);
+}
+
+.art {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background:
+    radial-gradient(
+      80% 90% at 20% 10%,
+      color-mix(in srgb, var(--aurora-3) 55%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      90% 90% at 90% 90%,
+      color-mix(in srgb, var(--aurora-2) 55%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(140deg, color-mix(in srgb, var(--aurora-1) 30%, transparent), transparent);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 52px;
+  padding: 9px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-strong);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+
+.card::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--brand) 30%, transparent);
+}
+
+.card::after {
+  content: '';
+  width: 80%;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--ink-3);
+  opacity: 0.3;
+}
+
+@keyframes hover-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -14px;
+  }
+}

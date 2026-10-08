@@ -1,0 +1,164 @@
+/* Generado por scripts/tokens.mjs desde tokens.json — no editar a mano. */
+
+:root {
+  color-scheme: light;
+  --brand: #5B77B8;
+  --brand-strong: #48609B;
+  --aurora-1: #8FA0C8;
+  --aurora-2: #A7B2CE;
+  --aurora-3: #BFA9C6;
+  --canvas: #EAECF4;
+  --ink: #0D1220;
+  --ink-2: #4A5268;
+  --ink-3: #828BA1;
+  --glass: rgba(255, 255, 255, 0.52);
+  --glass-strong: rgba(255, 255, 255, 0.66);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 24px 60px -30px rgba(20, 32, 64, 0.42);
+  --line: rgba(13, 18, 32, 0.1);
+  --aurora-opacity: 0.85;
+  --on-brand: #FFFFFF;
+  --on-tile: #FFFFFF;
+  --tile-ink: #0E1330;
+  --whatsapp: #25D366;
+  --on-whatsapp: #FFFFFF;
+  --error: #B91C1C;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --canvas: #07080C;
+    --ink: #EEF1F7;
+    --ink-2: #A6AEC2;
+    --ink-3: #6C7488;
+    --glass: rgba(24, 26, 34, 0.46);
+    --glass-strong: rgba(30, 33, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-highlight: rgba(255, 255, 255, 0.16);
+    --glass-shadow: 0 30px 70px -32px rgba(0, 0, 0, 0.7);
+    --line: rgba(255, 255, 255, 0.1);
+    --aurora-opacity: 0.45;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #07080C;
+  --ink: #EEF1F7;
+  --ink-2: #A6AEC2;
+  --ink-3: #6C7488;
+  --glass: rgba(24, 26, 34, 0.46);
+  --glass-strong: rgba(30, 33, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.16);
+  --glass-shadow: 0 30px 70px -32px rgba(0, 0, 0, 0.7);
+  --line: rgba(255, 255, 255, 0.1);
+  --aurora-opacity: 0.45;
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-aurora-1: var(--aurora-1);
+  --color-aurora-2: var(--aurora-2);
+  --color-aurora-3: var(--aurora-3);
+  --color-canvas: var(--canvas);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-glass: var(--glass);
+  --color-glass-strong: var(--glass-strong);
+  --color-glass-border: var(--glass-border);
+  --color-glass-highlight: var(--glass-highlight);
+  --color-line: var(--line);
+  --color-on-brand: var(--on-brand);
+  --color-on-tile: var(--on-tile);
+  --color-tile-ink: var(--tile-ink);
+  --color-whatsapp: var(--whatsapp);
+  --color-on-whatsapp: var(--on-whatsapp);
+  --color-error: var(--error);
+  --shadow-cta: 0 10px 26px -10px var(--brand), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --shadow-cta-hover: 0 16px 34px -12px var(--brand), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --shadow-panel: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+  --shadow-inset: inset 0 1px 0 var(--glass-highlight);
+  --shadow-fab: 0 14px 32px -8px rgba(0, 0, 0, 0.42);
+}
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --text-*: initial;
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.84375rem;
+  --text-md: 0.90625rem;
+  --text-base: 0.96875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.0625rem;
+  --text-2xl: 1.125rem;
+  --text-3xl: 1.1875rem;
+  --text-4xl: 1.375rem;
+  --text-5xl: 1.625rem;
+  --text-hero: clamp(2.5rem, 6vw, 4.25rem);
+  --text-hero-compact: clamp(2rem, 9vw, 2.5rem);
+  --text-section: clamp(1.6875rem, 4.2vw, 2.5625rem);
+  --text-section-compact: clamp(1.5rem, 7vw, 1.875rem);
+  --text-panel: clamp(1.4375rem, 3.4vw, 2.0625rem);
+  --text-closing: clamp(1.75rem, 4.6vw, 2.75rem);
+  --text-result: clamp(1.625rem, 4vw, 2.375rem);
+  --text-question: clamp(1.25rem, 2.6vw, 1.5625rem);
+  --text-intro: clamp(1.0625rem, 2.2vw, 1.25rem);
+  --text-quote: clamp(1.1875rem, 3vw, 1.625rem);
+  --text-metric: clamp(1.875rem, 4.5vw, 2.75rem);
+  --font-weight-regular: 400;
+  --font-weight-book: 450;
+  --font-weight-medium: 500;
+  --font-weight-emphasis: 550;
+  --font-weight-semibold: 600;
+  --font-weight-heavy: 650;
+  --font-weight-bold: 700;
+  --leading-heading: 1.06;
+  --leading-compact: 1.35;
+  --leading-body: 1.6;
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.03em;
+  --tracking-title: -0.02em;
+  --tracking-body: -0.01em;
+  --tracking-mono: 0.02em;
+  --tracking-mono-wide: 0.05em;
+  --tracking-caps: 0.08em;
+  --tracking-caps-wide: 0.16em;
+  --tracking-eyebrow: 0.2em;
+  --spacing: 0.25rem;
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: calc(infinity * 1px);
+  --blur-orb: 6px;
+  --blur-chip: 10px;
+  --blur-control: 12px;
+  --blur-button: 14px;
+  --blur-nav: 18px;
+  --blur-panel: 22px;
+  --blur-aurora-compact: 64px;
+  --blur-aurora: 76px;
+  --breakpoint-*: initial;
+  --breakpoint-xs: 23.75rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 45rem;
+  --breakpoint-lg: 57.5rem;
+  --breakpoint-xl: 65rem;
+  --container-site: 67.5rem;
+  --container-title: 14ch;
+  --container-closing: 20ch;
+  --container-quote: 38ch;
+  --container-copy: 48ch;
+  --container-intro: 50ch;
+  --container-reason: 56ch;
+  --container-lead: 60ch;
+}

@@ -1,0 +1,97 @@
+<section id="paquetes" class="py-12.5 sm:py-19.5" aria-labelledby="paquetes-title">
+  <div class="wrap">
+    <app-section-heading
+      titleId="paquetes-title"
+      eyebrow="Precios claros"
+      title="Elige por dónde empezar. Sube de nivel cuando tu negocio lo pida."
+      lead="Cada paquete tiene precio publicado y dice justo qué incluye. Sin letras chiquitas."
+    />
+
+    <div class="mb-6 grid gap-4 md:grid-cols-3">
+      @for (tile of tiles; track tile.title; let i = $index) {
+        @if (tile.whatsapp; as message) {
+          <a class="tile" [class]="'tile-' + tile.tone" [appWhatsApp]="message" [appReveal]="i">
+            <span class="absolute top-5.5 right-6 text-xl opacity-90" aria-hidden="true">→</span>
+            <span class="font-mono text-2xs tracking-caps uppercase opacity-80">{{
+              tile.kicker
+            }}</span>
+            <h3 class="text-4xl tracking-title">{{ tile.title }}</h3>
+            <p class="text-sm font-regular opacity-80">{{ tile.body }}</p>
+          </a>
+        } @else {
+          <a class="tile" [class]="'tile-' + tile.tone" [href]="tile.href" [appReveal]="i">
+            <span class="absolute top-5.5 right-6 text-xl opacity-90" aria-hidden="true">↓</span>
+            <span class="font-mono text-2xs tracking-caps uppercase opacity-80">{{
+              tile.kicker
+            }}</span>
+            <h3 class="text-4xl tracking-title">{{ tile.title }}</h3>
+            <p class="text-sm font-regular opacity-80">{{ tile.body }}</p>
+          </a>
+        }
+      }
+    </div>
+
+    <ul class="grid gap-4.5 sm:grid-cols-2 xl:grid-cols-3">
+      @for (pkg of packages; track pkg.id; let i = $index) {
+        <li
+          class="glass relative flex flex-col gap-3.5 p-5.5 transition-transform duration-200 hover:-translate-y-1.25 sm:p-6.5"
+          [class.outline-2]="pkg.featured"
+          [class.outline-brand]="pkg.featured"
+          [class.border-dashed]="pkg.recurring"
+          [appReveal]="i"
+        >
+          @if (pkg.featured) {
+            <span
+              hlmBadge
+              class="absolute -top-3 left-5.5 h-auto px-3 py-1.5 font-mono text-2xs tracking-caps uppercase shadow-inset sm:left-6.5"
+            >
+              El más elegido
+            </span>
+          }
+          <p class="min-h-8 font-mono text-xs tracking-mono text-ink-3">{{ pkg.audience }}</p>
+          <h3 class="text-4xl tracking-title">{{ pkg.name }}</h3>
+          <p class="font-mono text-5xl font-semibold tracking-body text-ink tabular-nums">
+            {{ formatMxn(pkg.price.from)
+            }}<small class="text-sm font-regular text-ink-3">{{ priceSuffix(pkg.price) }}</small>
+          </p>
+          <ul class="flex flex-col gap-2.5 text-md text-ink-2">
+            @for (feature of pkg.features; track feature) {
+              <li class="flex items-start gap-2.5 font-regular">
+                <span class="plus-bullet mt-0.75" aria-hidden="true"></span>{{ feature }}
+              </li>
+            }
+          </ul>
+          <p class="mt-auto border-t border-line pt-3.5 font-mono text-xs text-ink-3">
+            <span aria-hidden="true">{{ pkg.recurring ? '↻' : '⏱' }}</span> {{ pkg.delivery }}
+          </p>
+          <a
+            hlmBtn
+            [variant]="pkg.featured ? 'cta' : 'glass'"
+            size="cta"
+            [appWhatsApp]="pkg.cta.message"
+          >
+            {{ pkg.cta.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div
+      class="glass relative isolate mt-5.5 flex flex-wrap items-center justify-between gap-4 overflow-hidden px-5 py-6 sm:gap-6 sm:px-7.5 sm:py-7"
+      appReveal
+    >
+      <div
+        class="absolute inset-0 -z-10 bg-linear-120 from-brand/14 to-transparent to-55%"
+        aria-hidden="true"
+      ></div>
+      <p class="max-w-lead font-regular text-ink-2">
+        <b class="font-semibold text-ink">¿Necesitas algo más que una página?</b><br />
+        También hacemos sistemas a la medida y automatizaciones con IA —el mismo equipo que opera
+        Kindu. Cuéntanos qué necesitas y te decimos si podemos.
+      </p>
+      <a hlmBtn variant="cta" size="cta" class="max-sm:w-full" [appWhatsApp]="upsellMessage"
+        >Cuéntanos tu idea →</a
+      >
+    </div>
+  </div>
+</section>

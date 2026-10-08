@@ -1,0 +1,141 @@
+<section id="diagnostico" class="pt-2 pb-12.5 sm:pb-19.5" aria-labelledby="diagnostico-title">
+  <div class="wrap">
+    <div class="glass px-4.5 py-5.5 sm:p-6.5 md:p-9 lg:p-11" appReveal>
+      <div class="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
+        <span
+          hlmBadge
+          class="h-auto px-3.25 py-1.5 font-mono text-2xs tracking-caps uppercase shadow-inset"
+        >
+          Empieza aquí
+        </span>
+        <span class="font-mono text-xs tracking-mono-wide text-ink-3"
+          >30 segundos · gratis · sin compromiso</span
+        >
+      </div>
+      <h2 id="diagnostico-title" class="mt-0.5 mb-2 text-panel">
+        ¿No sabes qué necesitas? En 30 segundos te decimos por dónde empezar.
+      </h2>
+      <p class="max-w-lead text-ink-2">
+        Responde 3 preguntas rápidas. Te decimos qué paquete te conviene —no el más caro— y te
+        dejamos tu mensaje de WhatsApp listo para enviar.
+      </p>
+
+      @if (recommendation(); as result) {
+        <div
+          class="mt-6.5 animate-in fade-in slide-in-from-bottom-2 duration-500"
+          aria-live="polite"
+        >
+          <div class="glass relative isolate overflow-hidden p-5.5 sm:p-6.5 md:p-9.5">
+            <div
+              class="absolute inset-0 -z-10 bg-linear-135 from-brand/16 to-transparent to-60%"
+              aria-hidden="true"
+            ></div>
+            <p class="mb-3 text-xs font-semibold tracking-caps-wide text-brand uppercase">
+              Tu punto de partida recomendado
+            </p>
+            <h3 #resultTitle tabindex="-1" class="mb-2 text-result outline-none">
+              {{ result.name }}
+            </h3>
+            <p class="mb-4 font-mono text-3xl text-brand tabular-nums">{{ result.price }}</p>
+            <p class="mb-6 max-w-reason text-ink-2">{{ result.reason }}</p>
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.25">
+              <a hlmBtn variant="cta" size="cta-lg" class="max-sm:w-full" [appWhatsApp]="message()">
+                Enviar por WhatsApp →
+              </a>
+              <a hlmBtn variant="glass" size="cta" class="max-sm:w-full" href="#paquetes"
+                >Ver todos los paquetes</a
+              >
+              <button type="button" class="link-btn" (click)="reset()">Empezar de nuevo</button>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="mt-6.5 mb-6 flex gap-1.5" aria-hidden="true">
+          @for (s of steps; track s) {
+            <i
+              class="h-1 flex-1 rounded-full transition-colors duration-300"
+              [class.bg-brand]="s <= step()"
+              [class.bg-line]="s > step()"
+            ></i>
+          }
+        </div>
+
+        <form (submit)="submit($event)">
+          @switch (step()) {
+            @case (1) {
+              <fieldset class="animate-in fade-in slide-in-from-bottom-2 duration-400">
+                <legend #questionTitle tabindex="-1" class="mb-5 outline-none">
+                  <span class="question-count">Pregunta <b>1</b> de 3</span>
+                  <span class="question-title">¿Qué quieres lograr con tu presencia en línea?</span>
+                </legend>
+                <div class="grid gap-3 sm:grid-cols-3">
+                  @for (choice of goalChoices; track choice.value) {
+                    <button
+                      [appChoice]="choice"
+                      [selected]="goal() === choice.value"
+                      (click)="chooseGoal(choice.value)"
+                    ></button>
+                  }
+                </div>
+              </fieldset>
+            }
+            @case (2) {
+              <fieldset class="animate-in fade-in slide-in-from-bottom-2 duration-400">
+                <legend #questionTitle tabindex="-1" class="mb-5 outline-none">
+                  <span class="question-count">Pregunta <b>2</b> de 3</span>
+                  <span class="question-title">¿Ya tienes página web?</span>
+                </legend>
+                <div class="grid gap-3 sm:grid-cols-3">
+                  @for (choice of websiteChoices; track choice.value) {
+                    <button
+                      [appChoice]="choice"
+                      [selected]="website() === choice.value"
+                      (click)="chooseWebsite(choice.value)"
+                    ></button>
+                  }
+                </div>
+                <div class="mt-5.5">
+                  <button type="button" class="link-btn" (click)="goTo(1)">← Regresar</button>
+                </div>
+              </fieldset>
+            }
+            @case (3) {
+              <div class="animate-in fade-in slide-in-from-bottom-2 duration-400">
+                <label
+                  #questionTitle
+                  tabindex="-1"
+                  for="diagnostico-negocio"
+                  class="mb-5 block outline-none"
+                >
+                  <span class="question-count">Pregunta <b>3</b> de 3</span>
+                  <span class="question-title">
+                    ¿Qué vende tu negocio?
+                    <span class="text-base font-regular text-ink-3">(opcional)</span>
+                  </span>
+                </label>
+                <input
+                  #businessInput
+                  hlmInput
+                  id="diagnostico-negocio"
+                  type="text"
+                  autocomplete="off"
+                  class="mt-0.5 h-auto rounded-lg border-glass-border bg-glass-strong px-4 py-3.75 text-lg md:text-lg"
+                  placeholder="Ej. muebles de madera a la medida en Pachuca"
+                  [maxLength]="businessMaxLength"
+                  [value]="business()"
+                  (input)="business.set(businessInput.value)"
+                />
+                <div class="mt-5.5 flex flex-wrap items-center gap-3.5">
+                  <button hlmBtn variant="cta" size="cta" type="submit">
+                    Ver mi recomendación →
+                  </button>
+                  <button type="button" class="link-btn" (click)="goTo(2)">← Regresar</button>
+                </div>
+              </div>
+            }
+          }
+        </form>
+      }
+    </div>
+  </div>
+</section>

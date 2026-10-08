@@ -1,0 +1,57 @@
+/* Accesos por categoría: degradados de la paleta sobre tinta oscura, texto claro. */
+.tile {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: calc(var(--spacing) * 1.75);
+  min-height: calc(var(--spacing) * 39.5);
+  padding: calc(var(--spacing) * 6.5);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--glass-shadow);
+  color: var(--on-tile);
+  transition: transform 0.18s ease;
+}
+
+.tile:hover {
+  transform: translateY(-4px);
+}
+
+.tile::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -34px;
+  right: -34px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--on-tile) 14%, transparent);
+}
+
+.tile-1 {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--brand) 80%, var(--tile-ink)),
+    color-mix(in srgb, var(--aurora-3) 62%, var(--tile-ink))
+  );
+}
+
+.tile-2 {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--aurora-2) 72%, var(--tile-ink)),
+    color-mix(in srgb, var(--brand) 72%, var(--tile-ink))
+  );
+}
+
+.tile-3 {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--aurora-3) 74%, var(--tile-ink)),
+    color-mix(in srgb, var(--aurora-2) 62%, var(--tile-ink))
+  );
+}

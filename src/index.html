@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <title>VertexLabs · Páginas web y tiendas en línea para PyME, con precio cerrado</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Páginas web y tiendas en línea para negocios en todo México, con precio cerrado desde el principio. Diagnóstico gratis en 30 segundos. Desarrollo web en Pachuca, Hidalgo."
+    />
+    <meta name="theme-color" content="#EAECF4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#07080C" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta
+      property="og:title"
+      content="VertexLabs · Tu negocio en internet, hecho bien y sin sorpresas"
+    />
+    <meta
+      property="og:description"
+      content="Paquetes de páginas web y tiendas en línea con precio publicado. Te decimos la verdad antes de cobrarte."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <!--
+      Tema antes del primer pintado: preferencia guardada (ThemeService, clave vl-theme) o la del
+      sistema. Evita el destello de tema incorrecto en el HTML prerenderizado.
+    -->
+    <script>
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem('vl-theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+
+    <!-- SEO local (doc 23 §7). Sin url ni teléfono hasta tener dominio y número oficiales. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "VertexLabs",
+        "description": "Desarrollo de páginas web y tiendas en línea para PyME, con precio cerrado.",
+        "email": "hola@vertexlabs.mx",
+        "areaServed": { "@type": "Country", "name": "México" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Pachuca",
+          "addressRegion": "Hidalgo",
+          "addressCountry": "MX"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

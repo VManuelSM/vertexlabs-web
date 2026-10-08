@@ -1,0 +1,118 @@
+/* Geometría de ilustración (vw/vh); colores y desenfoques siempre desde tokens. */
+
+.aurora {
+  position: fixed;
+  inset: -25% -12%;
+  z-index: -3;
+  opacity: var(--aurora-opacity);
+  pointer-events: none;
+
+  & b {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: drift 28s ease-in-out infinite;
+  }
+
+  & .blob-1 {
+    width: 54vw;
+    height: 54vw;
+    left: -8vw;
+    top: -10vw;
+    background: var(--aurora-1);
+  }
+
+  & .blob-2 {
+    width: 48vw;
+    height: 48vw;
+    right: -6vw;
+    top: 2vw;
+    background: var(--aurora-2);
+    animation-delay: -9s;
+  }
+
+  & .blob-3 {
+    width: 46vw;
+    height: 46vw;
+    left: 26vw;
+    bottom: -16vw;
+    background: var(--aurora-3);
+    animation-delay: -18s;
+  }
+
+  & .blob-4 {
+    width: 30vw;
+    height: 30vw;
+    right: 14vw;
+    bottom: 6vw;
+    background: var(--aurora-1);
+    opacity: 0.35;
+    animation-delay: -5s;
+  }
+}
+
+/* Orbes de vidrio nítidos: profundidad flotante. Ocultos en móvil (menos movimiento y batería). */
+.orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+
+  & i {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(var(--blur-orb));
+    backdrop-filter: blur(var(--blur-orb));
+    box-shadow: inset 0 2px 6px var(--glass-highlight);
+    animation: float 22s ease-in-out infinite;
+  }
+
+  & .orb-1 {
+    width: 150px;
+    height: 150px;
+    left: 6vw;
+    top: 22vh;
+    animation-delay: -3s;
+  }
+
+  & .orb-2 {
+    width: 88px;
+    height: 88px;
+    right: 9vw;
+    top: 62vh;
+    animation-delay: -11s;
+  }
+
+  & .orb-3 {
+    width: 54px;
+    height: 54px;
+    left: 40vw;
+    top: 78vh;
+    animation-delay: -7s;
+  }
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.6;
+  background: radial-gradient(130% 90% at 50% -10%, transparent 45%, var(--canvas) 100%);
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(4vw, 3vh) scale(1.08);
+  }
+  66% {
+    transform: translate(-3vw, -2vh) scale(0.95);
+  }
+}

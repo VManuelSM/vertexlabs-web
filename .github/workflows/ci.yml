@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Tokens, tipos, pruebas y e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Tokens sincronizados con tokens.json
+        run: node scripts/tokens.mjs --check
+
+      - run: pnpm typecheck
+
+      - name: Pruebas unitarias
+        run: pnpm test
+
+      - name: Build prerenderizado
+        run: pnpm build
+
+      - name: Navegador de Playwright
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Pruebas e2e sobre el build estático
+        run: pnpm exec playwright test
+
+      - name: Sitio estático
+        uses: actions/upload-artifact@v7
+        with:
+          name: vertexlabs-web
+          path: dist/vertexlabs-web/browser
+          retention-days: 14
+
+      - name: Reporte de e2e
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reporte-e2e
+          path: playwright-report
+          retention-days: 7

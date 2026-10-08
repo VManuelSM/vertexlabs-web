@@ -1,0 +1,52 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "paths": {
+      "@shared/*": [
+        "./src/app/shared/*"
+      ],
+      "@ui/button": [
+        "./src/app/shared/ui/button/src/index.ts"
+      ],
+      "@ui/utils": [
+        "./src/app/shared/ui/utils/src/index.ts"
+      ],
+      "@ui/badge": [
+        "./src/app/shared/ui/badge/src/index.ts"
+      ],
+      "@ui/accordion": [
+        "./src/app/shared/ui/accordion/src/index.ts"
+      ],
+      "@ui/input": [
+        "./src/app/shared/ui/input/src/index.ts"
+      ]
+    },
+    "resolveJsonModule": true
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
