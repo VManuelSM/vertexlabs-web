@@ -11,8 +11,17 @@
     />
     <meta name="theme-color" content="#EAECF4" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#07080C" media="(prefers-color-scheme: dark)" />
+    <!--
+      Dirección pública: GitHub Pages. Al mudarse a vertexlabs.mx cambiar las URL absolutas de este
+      archivo (canonical, og:url, og:image, twitter:image y JSON-LD) y baseHref en angular.json.
+    -->
+    <link rel="canonical" href="https://vmanuelsm.github.io/vertexlabs-web/" />
+
+    <!-- Vista previa al compartir el enlace (WhatsApp, Facebook, LinkedIn, X). `pnpm social`. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="VertexLabs" />
+    <meta property="og:url" content="https://vmanuelsm.github.io/vertexlabs-web/" />
     <meta
       property="og:title"
       content="VertexLabs · Tu negocio en internet, hecho bien y sin sorpresas"
@@ -21,7 +30,26 @@
       property="og:description"
       content="Paquetes de páginas web y tiendas en línea con precio publicado. Te decimos la verdad antes de cobrarte."
     />
+    <meta property="og:image" content="https://vmanuelsm.github.io/vertexlabs-web/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="VertexLabs: tu negocio en internet, hecho bien y sin sorpresas. Precio cerrado, diagnóstico gratis en 30 segundos, en todo México."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="VertexLabs · Tu negocio en internet, hecho bien y sin sorpresas"
+    />
+    <meta
+      name="twitter:description"
+      content="Paquetes de páginas web y tiendas en línea con precio publicado. Te decimos la verdad antes de cobrarte."
+    />
+    <meta name="twitter:image" content="https://vmanuelsm.github.io/vertexlabs-web/og-image.jpg" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 
     <!--
       Tema antes del primer pintado: preferencia guardada (ThemeService, clave vl-theme) o la del
@@ -40,13 +68,16 @@
       })();
     </script>
 
-    <!-- SEO local (doc 23 §7). Sin url ni teléfono hasta tener dominio y número oficiales. -->
+    <!-- SEO local (doc 23 §7). -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "VertexLabs",
         "description": "Desarrollo de páginas web y tiendas en línea para PyME, con precio cerrado.",
+        "url": "https://vmanuelsm.github.io/vertexlabs-web/",
+        "image": "https://vmanuelsm.github.io/vertexlabs-web/og-image.jpg",
+        "telephone": "+52 771 229 1403",
         "email": "hola@vertexlabs.mx",
         "areaServed": { "@type": "Country", "name": "México" },
         "address": {

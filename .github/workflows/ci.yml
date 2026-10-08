@@ -6,9 +6,13 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+# En main no se cancela una corrida en curso: podría cortar un despliegue a medias.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   verify:
@@ -44,12 +48,11 @@ jobs:
       - name: Pruebas e2e sobre el build estático
         run: pnpm exec playwright test
 
-      - name: Sitio estático
-        uses: actions/upload-artifact@v7
+      - name: Artefacto para GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
         with:
-          name: vertexlabs-web
           path: dist/vertexlabs-web/browser
-          retention-days: 14
 
       - name: Reporte de e2e
         if: failure()
@@ -58,3 +61,18 @@ jobs:
           name: reporte-e2e
           path: playwright-report
           retention-days: 7
+
+  deploy:
+    name: Publicar en GitHub Pages
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

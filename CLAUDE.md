@@ -25,15 +25,16 @@ ambiguo, preguntar; no inventar.
 
 ## Stack vigente
 
-| Componente  | Valor                                                                                      |
-| ----------- | ------------------------------------------------------------------------------------------ |
-| Runtime     | Node 24 (`.nvmrc`), pnpm (versión fijada en `packageManager`)                              |
-| UI          | Angular 21 LTS: standalone, signals, zoneless, `OnPush`                                    |
+| Componente  | Valor                                                                                        |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| Runtime     | Node 24 (`.nvmrc`), pnpm (versión fijada en `packageManager`)                                |
+| UI          | Angular 21 LTS: standalone, signals, zoneless, `OnPush`                                      |
 | Render      | Prerender estático (`outputMode: "static"`): `dist/vertexlabs-web/browser` son solo archivos |
-| Componentes | SpartanUI 1.6 — brain (npm) + helm copiado en `src/app/shared/ui`, estilo `maia`           |
-| Estilos     | Tailwind 4 vía PostCSS, alimentado por `tokens.json`                                       |
-| Iconos      | `@ng-icons/lucide`                                                                         |
-| Tests       | Vitest (`ng test`) y Playwright contra el build estático                                   |
+| Componentes | SpartanUI 1.6 — brain (npm) + helm copiado en `src/app/shared/ui`, estilo `maia`             |
+| Estilos     | Tailwind 4 vía PostCSS, alimentado por `tokens.json`                                         |
+| Iconos      | `@ng-icons/lucide`                                                                           |
+| Tests       | Vitest (`ng test`) y Playwright contra el build estático                                     |
+| Hosting     | GitHub Pages vía Actions desde `main`, bajo `/vertexlabs-web/` (`baseHref` de producción)    |
 
 Respecto al marco: sin backend no aplican OpenAPI/orval, TanStack Query, JWT ni MinIO. Si la
 landing llega a necesitar servidor (formulario propio, analítica propia), se decide en un ADR.
@@ -54,7 +55,8 @@ src/app/
     lib/          directivas y utilidades (enlace de WhatsApp, revelado al hacer scroll)
     tokens/       tokens.json — fuente única de la identidad visual
 src/styles.css    Tailwind + preset de Spartan + tema de Spartan con tokens + material de vidrio
-scripts/          tokens.mjs (genera src/styles/tokens.css), serve-dist.mjs (build estático)
+scripts/          tokens.mjs (genera src/styles/tokens.css), social-images.mjs (miniaturas para
+                  redes), serve-dist.mjs (build estático bajo la ruta base)
 e2e/              Playwright (escritorio y móvil)
 ```
 
@@ -99,6 +101,14 @@ e2e/              Playwright (escritorio y móvil)
   `hlm-button.ts` (CTAs del material liquid glass); `hlm.ts` extiende tailwind-merge con la escala
   de `tokens.json` para que fusione bien las clases del proyecto.
 
+### Publicación
+
+- La ruta base vive en `angular.json` (`baseHref` de producción); `serve-dist.mjs` y Playwright la
+  leen de ahí. Las pruebas navegan con rutas relativas (`./`, `./#faq`).
+- Las URL absolutas de `src/index.html` (canonical, Open Graph, Twitter, JSON-LD) apuntan a la
+  dirección pública; si cambia la dirección, cambian juntas con `baseHref`.
+- `public/og-image.jpg` y `public/apple-touch-icon.png` salen de `pnpm social`; no se editan a mano.
+
 ### Accesibilidad
 
 - Un `h1` por página; cada sección con `aria-labelledby` hacia su `h2`.
@@ -121,7 +131,8 @@ e2e/              Playwright (escritorio y móvil)
 pnpm install
 pnpm start        # desarrollo en http://localhost:4200
 pnpm build        # tokens + build prerenderizado en dist/vertexlabs-web/browser
-pnpm preview      # sirve ese build estático en http://localhost:4300
+pnpm preview      # sirve ese build estático en http://localhost:4300/vertexlabs-web/
+pnpm social       # regenera og-image.jpg y apple-touch-icon.png desde tokens.json
 pnpm test         # unitarias (Vitest)
 pnpm e2e          # build + Playwright (escritorio y móvil)
 pnpm verify       # tokens, tipos, unitarias y e2e: lo mismo que revisa el CI
@@ -131,6 +142,7 @@ pnpm verify       # tokens, tipos, unitarias y e2e: lo mismo que revisa el CI
 
 - Modificar este archivo o `tokens.json`.
 - Cambiar precios, paquetes, la regla del diagnóstico o el copy de forma sustantiva.
-- Apagar `reviewMode`, publicar, configurar dominio u hosting.
+- Push a `main` (publica en GitHub Pages), encender `reviewMode`, cambiar el número de WhatsApp,
+  configurar dominio u hosting.
 - Agregar dependencias de runtime, analítica o servicios de terceros.
 - Reescribir estilos de helm más allá de las extensiones listadas.

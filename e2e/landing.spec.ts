@@ -6,18 +6,39 @@ test.describe('Landing VertexLabs (doc 23)', () => {
   test('el HTML prerenderizado ya trae el contenido, sin depender de JavaScript (SEO §7)', async ({
     request,
   }) => {
-    const html = await (await request.get('/')).text();
+    const html = await (await request.get('./')).text();
     expect(html).toContain('lang="es-MX"');
     expect(html).toContain('Tu negocio en internet, hecho bien y');
     expect(html).toContain('Presencia PyME');
     expect(html).toContain('$5,900');
     expect(html).toContain('Porque no es lo mismo.');
-    expect(html).toMatch(/href="https:\/\/wa\.me\/\w+\?text=Hola/);
+    expect(html).toMatch(/href="https:\/\/wa\.me\/527712291403\?text=Hola/);
     expect(html).toContain('"@type": "ProfessionalService"');
   });
 
+  test('las miniaturas para redes sociales están declaradas y se sirven', async ({ request }) => {
+    const html = await (await request.get('./')).text();
+    const meta = (key: string) =>
+      html.match(new RegExp(`<meta (?:property|name)="${key}" content="([^"]+)"`))?.[1];
+
+    expect(meta('og:image')).toMatch(/^https:\/\/.+\/og-image\.jpg$/);
+    expect(meta('og:image:width')).toBe('1200');
+    expect(meta('og:image:height')).toBe('630');
+    expect(meta('twitter:card')).toBe('summary_large_image');
+    expect(meta('og:url')).toBe(html.match(/<link rel="canonical" href="([^"]+)"/)?.[1]);
+
+    for (const [file, type] of [
+      ['og-image.jpg', 'image/jpeg'],
+      ['apple-touch-icon.png', 'image/png'],
+    ]) {
+      const response = await request.get(`./${file}`);
+      expect(response.status()).toBe(200);
+      expect(response.headers()['content-type']).toBe(type);
+    }
+  });
+
   test('los casos enlazan a los sitios en producción (§4, Sec 7)', async ({ page }) => {
-    await page.goto('/#casos');
+    await page.goto('./#casos');
     const cases = page.locator('#casos');
     await expect(cases.getByRole('link', { name: 'kindu.vertexlabs.mx' })).toHaveAttribute(
       'href',
@@ -38,7 +59,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
     page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
     page.on('pageerror', (error) => errors.push(error.message));
 
-    await page.goto('/');
+    await page.goto('./');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await page.mouse.wheel(0, 20_000);
     await page.waitForTimeout(300);
@@ -51,7 +72,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
   });
 
   test('el diagnóstico recomienda un paquete y prepara el WhatsApp (§3.2)', async ({ page }) => {
-    await page.goto('/#diagnostico');
+    await page.goto('./#diagnostico');
     const panel = page.locator('#diagnostico');
 
     await panel.getByRole('button', { name: /Vender en línea/ }).click();
@@ -76,7 +97,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
 
   test('el tema oscuro se recuerda al recargar', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
-    await page.goto('/');
+    await page.goto('./');
     const html = page.locator('html');
     await expect(html).toHaveAttribute('data-theme', 'light');
 
@@ -89,7 +110,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
   });
 
   test('usa la paleta Grafito, sin selector de paleta', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('./');
     const brand = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue('--brand').trim(),
     );
@@ -98,7 +119,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
   });
 
   test('el FAQ abre la primera respuesta y despliega las demás', async ({ page }) => {
-    await page.goto('/#faq');
+    await page.goto('./#faq');
     const faq = page.locator('#faq');
     const first = faq.getByRole('button', { name: /Por qué cuestan más/ });
     const second = faq.getByRole('button', { name: /Cuánto cuesta y cuánto tarda/ });
@@ -112,7 +133,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
 
   test('las anclas del menú llevan a su sección', async ({ page }) => {
     test.skip(isMobile(page), 'En móvil el menú de anclas se oculta, como en el mockup.');
-    await page.goto('/');
+    await page.goto('./');
     await page
       .getByRole('navigation', { name: 'Principal' })
       .getByRole('link', { name: 'Paquetes' })
@@ -123,7 +144,7 @@ test.describe('Landing VertexLabs (doc 23)', () => {
 
   test('en móvil la barra es compacta y WhatsApp queda a un toque', async ({ page }) => {
     test.skip(!isMobile(page), 'Solo aplica al viewport móvil.');
-    await page.goto('/');
+    await page.goto('./');
     const header = await page.locator('app-site-header').boundingBox();
     expect(header!.height).toBeLessThanOrEqual(59);
     await expect(page.getByRole('navigation', { name: 'Principal' })).toBeHidden();

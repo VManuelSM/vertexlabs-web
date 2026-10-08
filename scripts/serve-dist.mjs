@@ -1,8 +1,9 @@
-// Sirve el build estático (dist/vertexlabs-web/browser) tal como quedaría en un hosting de
-// archivos: sin servidor de Angular. Lo usan `pnpm preview` y Playwright.
+// Sirve el build estático (dist/vertexlabs-web/browser) tal como queda en GitHub Pages: sin
+// servidor de Angular y bajo la misma ruta base. Lo usan `pnpm preview` y Playwright.
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import path from 'node:path';
+import { baseHref } from './base-href.mjs';
 
 const root = path.resolve(import.meta.dirname, '../dist/vertexlabs-web/browser');
 const port = Number(process.env['PORT'] ?? 4300);
@@ -12,6 +13,8 @@ const types = {
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
   '.json': 'application/json',
   '.ico': 'image/x-icon',
   '.txt': 'text/plain; charset=utf-8',
@@ -24,7 +27,11 @@ if (!existsSync(root)) {
 
 createServer((req, res) => {
   const { pathname } = new URL(req.url ?? '/', 'http://localhost');
-  let file = path.join(root, decodeURIComponent(pathname));
+  if (!pathname.startsWith(baseHref)) {
+    res.writeHead(302, { location: baseHref }).end();
+    return;
+  }
+  let file = path.join(root, decodeURIComponent(pathname.slice(baseHref.length)));
   if (!file.startsWith(root)) {
     res.writeHead(403).end();
     return;
@@ -36,4 +43,4 @@ createServer((req, res) => {
   }
   res.writeHead(200, { 'content-type': types[path.extname(file)] ?? 'application/octet-stream' });
   createReadStream(file).pipe(res);
-}).listen(port, () => console.log(`Build estático en http://localhost:${port}`));
+}).listen(port, () => console.log(`Build estático en http://localhost:${port}${baseHref}`));

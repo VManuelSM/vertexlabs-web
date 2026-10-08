@@ -12,6 +12,7 @@
   "scripts": {
     "ng": "ng",
     "tokens": "node scripts/tokens.mjs",
+    "social": "node scripts/social-images.mjs",
     "start": "pnpm tokens && ng serve",
     "build": "pnpm tokens && ng build",
     "preview": "node scripts/serve-dist.mjs",

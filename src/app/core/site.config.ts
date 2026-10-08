@@ -8,17 +8,17 @@ export interface SiteConfig {
   readonly email: string;
   /**
    * Revisión interna del mockup (doc 23 §8): muestra la franja "MOCKUP" y la nota del pie.
-   * Se apaga antes de publicar.
+   * Apagado desde la publicación del 2026-10-07; se enciende solo para revisar una propuesta.
    */
   readonly reviewMode: boolean;
 }
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
-  // Pendiente doc 23 §9 #8: número oficial. Mientras tanto los enlaces abren un chat de demostración.
-  whatsappNumber: '52XXXXXXXXXX',
+  // Número oficial (+52 771 229 1403), en el formato de wa.me.
+  whatsappNumber: '527712291403',
   whatsappGreeting: 'Hola, vengo del sitio de VertexLabs y quiero platicar sobre mi negocio.',
   email: 'hola@vertexlabs.mx',
-  reviewMode: true,
+  reviewMode: false,
 };
 
 export const SITE_CONFIG = new InjectionToken<SiteConfig>('SITE_CONFIG', {
