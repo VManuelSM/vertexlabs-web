@@ -95,6 +95,55 @@ a { color: inherit; }
   clip-path: inset(50%); overflow: hidden; white-space: nowrap;
 }
 
+/* ---------- preloader: el reloj se voltea mientras carga lo real ---------- */
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  background: linear-gradient(160deg, #203441 20%, #3c2a4a 70%, #6e2451 120%); /* taste-skill-ignore */
+}
+#preCount {
+  color: rgba(255, 255, 255, .7);
+  font-weight: 700;
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) { #preloader { display: none; } }
+
+/* ---------- cursor personalizado (lo monta JS solo en desktop) ---------- */
+#cursor-ring, #cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 120;
+  border-radius: 50%;
+  translate: -50% -50%;
+}
+#cursor-ring {
+  width: 38px; height: 38px;
+  border: 1.5px solid #fff;
+  mix-blend-mode: difference;
+  display: grid;
+  place-items: center;
+  transition: width .25s ease, height .25s ease;
+}
+#cursor-ring[data-state="link"] { width: 64px; height: 64px; }
+#cursor-ring[data-state="drag"] { width: 76px; height: 76px; }
+#cursor-label {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+#cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+}
+
 /* ---------- botones: una forma, esquinas cuadradas ---------- */
 .btn {
   display: inline-flex;
@@ -107,10 +156,9 @@ a { color: inherit; }
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
-  transition: transform .18s cubic-bezier(.2,.7,.2,1), background .18s ease;
+  transition: background .18s ease, opacity .15s ease;
 }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0) scale(.98); }
+.btn:active { opacity: .85; }
 /* texto grande y bold (≥14pt bold): el blanco sobre fresa cumple el umbral 3:1 de WCAG */
 .btn-accent {
   background: var(--accent);
@@ -302,17 +350,22 @@ a { color: inherit; }
   grid-template-rows: auto 1fr;
   padding: clamp(24px, 4vh, 44px) var(--margin);
 }
-/* cada momento con su gradiente de marca; el corte entre campos queda nítido */
+/* cada momento con su gradiente de marca; el corte entre campos queda nítido.
+   background-size > 100%: deja que el hover desplace el gradiente */
+.field {
+  background-size: 160% 160%;
+  background-position: 30% 40%;
+}
 .field-plum {
-  background: linear-gradient(135deg, #6e2451 0%, #a93a6c 58%, #f55786 125%); /* taste-skill-ignore */
+  background-image: linear-gradient(135deg, #6e2451 0%, #a93a6c 58%, #f55786 125%); /* taste-skill-ignore */
   color: #fff;
 }
 .field-navy {
-  background: linear-gradient(160deg, #203441 0%, #3c2a4a 62%, #6e2451 120%); /* taste-skill-ignore */
+  background-image: linear-gradient(160deg, #203441 0%, #3c2a4a 62%, #6e2451 120%); /* taste-skill-ignore */
   color: #fff;
 }
 .field-pink {
-  background: linear-gradient(150deg, #f55786 0%, #b43f6e 70%, #6e2451 130%); /* taste-skill-ignore */
+  background-image: linear-gradient(150deg, #f55786 0%, #b43f6e 70%, #6e2451 130%); /* taste-skill-ignore */
   color: #fff;
 }
 /* texto grande y bold sobre la zona fresa: cumple el umbral 3:1 de WCAG */

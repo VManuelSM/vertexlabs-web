@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import Lenis from "lenis";
+import { mountCursor } from "./cursor.js";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
 
@@ -77,11 +78,21 @@ function mountMetodoFluid() {
   }));
 
   let progress = 0, shown = 0, t = 0, visible = false, raf = 0;
+  let mx = -9, my = -9;
 
   ScrollTrigger.create({
     trigger: section, start: "top bottom", end: "bottom top", scrub: true,
     onUpdate: (self) => { progress = self.progress; },
   });
+
+  /* el blob más cercano al cursor crece un poco */
+  const onMouse = (e) => {
+    mx = (e.clientX / innerWidth) * W;
+    my = (e.clientY / innerHeight) * H;
+  };
+  const offMouse = () => { mx = -9; my = -9; };
+  section.addEventListener("mousemove", onMouse, { passive: true });
+  section.addEventListener("mouseleave", offMouse, { passive: true });
 
   function frame() {
     if (!visible) return;
@@ -98,13 +109,16 @@ function mountMetodoFluid() {
       const by = lerp(b.wp[i0][1], b.wp[i1][1], f);
       const x = (bx + 0.07 * Math.sin(t * b.sx + b.ox)) * W;
       const y = (by + 0.07 * Math.cos(t * b.sy + b.oy)) * H;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, b.r);
+      const near = Math.hypot(x - mx, y - my) < b.r * 0.9 ? 1.12 : 1;
+      b.boost = (b.boost || 1) + (near - (b.boost || 1)) * 0.06;
+      const radius = b.r * b.boost;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
       const [r, gg, bb] = b.rgb;
       g.addColorStop(0, `rgba(${r},${gg},${bb},0.9)`);
       g.addColorStop(1, `rgba(${r},${gg},${bb},0)`);
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(x, y, b.r, 0, Math.PI * 2);
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.fill();
     }
     raf = requestAnimationFrame(frame);
@@ -119,7 +133,51 @@ function mountMetodoFluid() {
   }, { rootMargin: "60% 0px" });
   io.observe(section);
 
-  return () => { cancelAnimationFrame(raf); io.disconnect(); cv.remove(); };
+  return () => {
+    cancelAnimationFrame(raf);
+    io.disconnect();
+    section.removeEventListener("mousemove", onMouse);
+    section.removeEventListener("mouseleave", offMouse);
+    cv.remove();
+  };
+}
+
+/* ---------- preloader: carga real (fuentes + poster), techo 2.5 s ---------- */
+function runPreloader(onDone) {
+  const pre = document.getElementById("preloader");
+  if (!pre) { onDone(); return; }
+  lenis?.stop();
+  const count = document.getElementById("preCount");
+  const iso = pre.querySelector("img");
+  const state = { v: 0 };
+  const render = () => { count.textContent = Math.round(state.v); };
+  const bump = (to) => gsap.to(state, {
+    v: Math.max(to, state.v), duration: 0.5, ease: "power1.out", onUpdate: render,
+  });
+  const flip = gsap.to(iso, {
+    rotation: 180, transformOrigin: "50% 50%", duration: 0.9,
+    ease: "power2.inOut", repeat: -1, repeatDelay: 0.5,
+  });
+  gsap.set(pre, { clipPath: "inset(0 0 0% 0)" });
+
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    bump(100);
+    gsap.to(pre, {
+      clipPath: "inset(0 0 100% 0)", duration: 0.85, ease: "power4.inOut", delay: 0.4,
+      onComplete: () => { flip.kill(); pre.remove(); lenis?.start(); onDone(); },
+    });
+  };
+
+  document.fonts.ready.then(() => bump(55));
+  const poster = new Image();
+  poster.src = "/video/arena-poster.jpg";
+  const posterReady = poster.decode().catch(() => {});
+  posterReady.then(() => bump(90));
+  Promise.all([document.fonts.ready, posterReady]).then(finish);
+  gsap.delayedCall(2.5, finish);
 }
 
 /* ---------- radar vivo de la prueba: una vez dibujado, nunca reinicia ---------- */
@@ -228,12 +286,14 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
   });
 
-  gsap.from(".hw", {
-    yPercent: 118, duration: 0.9, ease: "power3.out", stagger: 0.09, delay: 0.15,
-  });
-  gsap.from(".hero-sub, .hero-actions, .scrollcue", {
-    y: 26, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.1, delay: 0.8,
-  });
+  const heroIntro = gsap.timeline({ paused: true });
+  heroIntro
+    .from(".hw", { yPercent: 118, duration: 0.9, ease: "power3.out", stagger: 0.09 })
+    .add(() => document.documentElement.classList.add("shutter-open"), "-=0.55")
+    .from(".hero-sub, .hero-actions, .scrollcue", {
+      y: 26, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.1,
+    }, "-=0.35");
+  runPreloader(() => heroIntro.play());
 
   gsap.to(".hero-sentence", {
     yPercent: -9, ease: "none",
@@ -380,8 +440,66 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   };
 });
 
+/* ---------- desktop con puntero fino: cursor y micro-interacciones ---------- */
+mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
+  const unmountCursor = mountCursor();
+
+  /* botones magnéticos */
+  const magnets = [];
+  document.querySelectorAll(".btn-accent, .nav-cta, .cta-send").forEach((btn) => {
+    const xTo = gsap.quickTo(btn, "x", { duration: 0.3, ease: "power3" });
+    const yTo = gsap.quickTo(btn, "y", { duration: 0.3, ease: "power3" });
+    const move = (e) => {
+      const r = btn.getBoundingClientRect();
+      xTo((e.clientX - r.left - r.width / 2) * 0.35);
+      yTo((e.clientY - r.top - r.height / 2) * 0.45);
+    };
+    const leave = () => gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.45)" });
+    btn.addEventListener("mousemove", move, { passive: true });
+    btn.addEventListener("mouseleave", leave, { passive: true });
+    magnets.push(() => {
+      btn.removeEventListener("mousemove", move);
+      btn.removeEventListener("mouseleave", leave);
+    });
+  });
+
+  /* campos: el icono sigue al mouse y el gradiente se desplaza */
+  const fieldFx = [];
+  document.querySelectorAll(".field").forEach((field) => {
+    const icon = field.querySelector(".field-icon");
+    const ix = icon && gsap.quickTo(icon, "x", { duration: 0.5, ease: "power2" });
+    const rot = icon && gsap.quickTo(icon, "rotation", { duration: 0.5, ease: "power2" });
+    const pos = { x: 30, y: 40 };
+    const apply = () => { field.style.backgroundPosition = `${pos.x}% ${pos.y}%`; };
+    const move = (e) => {
+      const r = field.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5;
+      const dy = (e.clientY - r.top) / r.height - 0.5;
+      if (icon) { ix(dx * 14); rot(dx * 4); }
+      gsap.to(pos, { x: 30 + dx * 26, y: 40 + dy * 16, duration: 0.8, ease: "power2.out", onUpdate: apply, overwrite: true });
+    };
+    const leave = () => {
+      if (icon) { ix(0); rot(0); }
+      gsap.to(pos, { x: 30, y: 40, duration: 0.9, ease: "power2.out", onUpdate: apply, overwrite: true });
+    };
+    field.addEventListener("mousemove", move, { passive: true });
+    field.addEventListener("mouseleave", leave, { passive: true });
+    fieldFx.push(() => {
+      field.removeEventListener("mousemove", move);
+      field.removeEventListener("mouseleave", leave);
+    });
+  });
+
+  return () => {
+    unmountCursor();
+    magnets.forEach((fn) => fn());
+    fieldFx.forEach((fn) => fn());
+  };
+});
+
 /* reduced-motion: el radar de la prueba se muestra dibujado y quieto */
 mm.add("(prefers-reduced-motion: reduce)", () => {
+  document.getElementById("preloader")?.remove();
   const svg = document.getElementById("proofRadar");
   if (svg && !svg.innerHTML.trim()) {
     const pt = buildProofRadar(svg);
