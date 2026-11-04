@@ -18,3 +18,9 @@
   `audio-video` con ruta absoluta (documentado en CLAUDE.md).
 - **gsap.ticker.lagSmoothing(0)** solo si no produce saltos; se valida en la
   prueba manual.
+- **Entradas one-shot con `once:true` + el grupo del footer con `fromTo`+`clearProps`.**
+  Un `ScrollTrigger.refresh()` tardío (chunk 3D/video) re-aplicaba el estado inicial de
+  `gsap.from` ya completados tras saltos instantáneos de scroll; el botón del footer
+  quedaba en opacity 0. `clearProps` al completar deja el DOM sin estilos inline.
+- **Unsplash 401 (2026-11-04)**: la key en `.env` no autoriza (¿Secret en vez de
+  Access Key?). El flujo `scripts/unsplash.mjs` queda listo; ningún asset dependía de él.

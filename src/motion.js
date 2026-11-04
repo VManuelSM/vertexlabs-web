@@ -309,11 +309,11 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     const chars = splitChars(field.querySelector(".field-phrase"));
     gsap.from(chars, {
       yPercent: 115, duration: 0.7, ease: "power3.out", stagger: 0.028,
-      scrollTrigger: { trigger: field, start: "top 62%" },
+      scrollTrigger: { trigger: field, start: "top 62%", once: true },
     });
     gsap.from(field.querySelector(".field-copy"), {
       y: 30, opacity: 0, duration: 0.8, ease: "power2.out",
-      scrollTrigger: { trigger: field, start: "top 62%" },
+      scrollTrigger: { trigger: field, start: "top 62%", once: true },
     });
 
     const icon = field.querySelector(".draw-icon");
@@ -369,11 +369,11 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
     gsap.from(".radar-frame", {
       y: 60, opacity: 0, duration: 0.9, ease: "power2.out",
-      scrollTrigger: { trigger: "#radar", start: "top 65%" },
+      scrollTrigger: { trigger: "#radar", start: "top 65%", once: true },
     });
     gsap.from(".radar-caption", {
       y: 30, opacity: 0, duration: 0.8,
-      scrollTrigger: { trigger: ".radar-stage", start: "top 60%" },
+      scrollTrigger: { trigger: ".radar-stage", start: "top 60%", once: true },
     });
   }
 
@@ -390,11 +390,11 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   mountProofRadar();
   gsap.from(".proof-sentence, .proof-media", {
     y: 34, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
-    scrollTrigger: { trigger: ".proof", start: "top 68%" },
+    scrollTrigger: { trigger: ".proof", start: "top 68%", once: true },
   });
   gsap.from(".cta-line, .cta-note", {
     y: 30, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
-    scrollTrigger: { trigger: ".cta", start: "top 72%" },
+    scrollTrigger: { trigger: ".cta", start: "top 72%", once: true },
   });
 
   /* ---------- footer: aurora, isotipo que se voltea y wordmark que sube ---------- */
@@ -412,7 +412,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   if (hourglass) {
     gsap.from(hourglass, {
       autoAlpha: 0, y: 20, duration: 0.8,
-      scrollTrigger: { trigger: ".footer", start: "top 75%" },
+      scrollTrigger: { trigger: ".footer", start: "top 75%", once: true },
     });
     /* el reloj de arena se voltea cada tanto, como quien espera */
     gsap.to(hourglass, {
@@ -426,10 +426,13 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true },
   });
 
-  gsap.from(".footer-ask, .footer-invite .btn, .footer-links", {
-    y: 30, opacity: 0, duration: 0.8, stagger: 0.1,
-    scrollTrigger: { trigger: ".footer", start: "top 70%" },
-  });
+  gsap.fromTo(".footer-ask, .footer-invite .btn, .footer-links",
+    { y: 30, autoAlpha: 0 },
+    {
+      y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1,
+      clearProps: "opacity,visibility,transform",
+      scrollTrigger: { trigger: ".footer", start: "top 70%", once: true },
+    });
 
   return () => {
     cleanupFluid();
