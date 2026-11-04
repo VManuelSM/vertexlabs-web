@@ -3,19 +3,6 @@ import "./motion.js";
 
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---------- obturador del hero (movimiento firma) ---------- */
-window.addEventListener("load", () => {
-  document.documentElement.classList.add("shutter-open");
-});
-
-/* ---------- video: quieto con reduced-motion o con ahorro de datos ---------- */
-if (reduced || navigator.connection?.saveData) {
-  document.querySelectorAll("video[autoplay]").forEach((v) => {
-    v.removeAttribute("autoplay");
-    v.pause();
-  });
-}
-
 /* ---------- el Radar (lo vivo) ---------- */
 const AXES = [
   { key: "propuesta", label: "Propuesta" },

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vertex Labs — Es el momento de tu negocio</title>
-  <meta name="description" content="Vertex Labs es un estudio de ingeniería y estrategia en Pachuca. Medimos tu negocio con el Radar, gratis, y construimos el software que le falta para crecer.">
+  <title>Vertex Labs — Medimos tu negocio. Construimos el resto.</title>
+  <meta name="description" content="Vertex Labs es un estudio de ingeniería y estrategia en Pachuca. Diagnóstico gratis con el Radar y software construido a la medida de tu negocio.">
   <link rel="icon" type="image/svg+xml" href="/assets/brand/isotipo-pink.svg">
   <link rel="preload" href="/fonts/GoodTiming-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/Averta-Regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -35,77 +35,95 @@
 
 <main id="top">
 
-  <!-- HERO · la frase es el layout -->
+  <!-- HERO · titular editorial + fotografía grande -->
   <section class="hero" aria-label="Portada">
-    <div class="aurora" aria-hidden="true">
-      <i class="a-plum"></i><i class="a-pink"></i><i class="a-plum2"></i><i class="a-pink2"></i>
-    </div>
-    <h1 class="hero-sentence">
-      <span class="hero-line"><span class="hw">Es</span> <span class="hw">el</span> <span class="hw">momento</span><span class="hero-slot" id="heroSlot"><video
-        src="/video/arena.webm" poster="/video/arena-poster.jpg"
-        autoplay muted loop playsinline preload="metadata"
-        width="1920" height="1080"
-        aria-label="Arena de los colores de la marca cayendo, como en un reloj de arena"></video></span></span>
-      <span class="hero-line"><span class="hw">de</span> <span class="hw">tu</span> <span class="hw">negocio.</span></span>
+    <h1 class="hero-title">
+      <span class="hero-line"><span class="hw">Medimos</span> <span class="hw">tu</span> <span class="hw">negocio.</span></span>
+      <span class="hero-line"><span class="hw">Construimos</span> <span class="hw">el</span> <span class="hw">resto.</span></span>
     </h1>
-    <div class="hero-foot">
-      <p class="hero-sub">Somos un estudio de ingeniería y estrategia en Pachuca.
-        Medimos tu negocio con el Radar, gratis, y construimos lo que le falta para crecer.</p>
+    <div class="hero-meta">
+      <p class="hero-sub">Somos Vertex Labs, un estudio de ingeniería y estrategia en
+        Pachuca. El diagnóstico es gratis; lo que sigue se construye a tu medida.</p>
       <div class="hero-actions">
         <a class="btn btn-accent" href="#radar">Corre tu Radar gratis</a>
         <a class="link-plain" href="#contacto">Cuéntanos tu reto</a>
       </div>
-      <a class="scrollcue" href="#caminos">Conoce los caminos <span class="scrollcue-arrow" aria-hidden="true">↓</span></a>
     </div>
+    <figure class="hero-photo photo">
+      <img src="/images/hero-negocio.webp"
+        srcset="/images/hero-negocio-1000.webp 1000w, /images/hero-negocio.webp 2000w"
+        sizes="(max-width: 900px) 100vw, 92vw"
+        alt="Mostrador de una panadería con pan recién horneado" width="2000" height="1482">
+    </figure>
+    <a class="scrollcue" href="#caminos">Conoce los caminos <span class="scrollcue-arrow" aria-hidden="true">↓</span></a>
   </section>
 
-  <!-- CAMINOS · cada negocio vive un momento distinto -->
-  <section id="caminos" aria-label="Caminos">
-    <p class="bridge">Cada negocio vive un momento distinto.
-      ¿Cuál es el tuyo?</p>
-    <div class="field field-plum">
-      <svg class="field-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
-        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <path pathLength="1" d="M8 104 L38 64 L56 82 L100 28"/>
-        <path pathLength="1" d="M78 28 H100 V50"/>
-        <path pathLength="1" class="icon-gem" d="M38 55 L47 64 L38 73 L29 64 Z"/>
-      </svg>
-      <p class="field-copy">¿Tienes un negocio y quieres vender más? Ese camino se llama
-        <a href="#contacto">Vertex</a>: armamos tu presencia completa, sitio, tienda en
-        línea y pagos, a tu ritmo y a meses.</p>
-      <h2 class="field-phrase">Momento de crecer</h2>
+  <!-- CAMINOS · filas editoriales foto + texto -->
+  <section id="caminos" class="caminos" aria-label="Caminos">
+    <p class="bridge">Dos caminos, un mismo equipo.</p>
+
+    <div class="row">
+      <figure class="photo">
+        <img src="/images/camino-crecer.webp"
+          srcset="/images/camino-crecer-1000.webp 1000w, /images/camino-crecer.webp 2000w"
+          sizes="(max-width: 900px) 100vw, 46vw"
+          alt="Interior de una boutique con bolsos y zapatos en exhibición" width="2000" height="1363" loading="lazy">
+      </figure>
+      <div class="row-copy">
+        <h2>¿Quieres vender más?</h2>
+        <p>Ese camino se llama <a href="#contacto">Vertex</a>: tu presencia completa,
+          sitio, tienda en línea y pagos, a tu ritmo y a meses. Para el negocio que
+          quiere crecer sin complicarse.</p>
+      </div>
     </div>
-    <div class="field field-navy field-mirror">
-      <svg class="field-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
-        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <path pathLength="1" d="M60 12 L101 36 V84 L60 108 L19 84 V36 Z"/>
-        <path pathLength="1" class="icon-orbit" d="M60 34 A26 26 0 1 1 59.9 34"/>
-        <path pathLength="1" class="icon-gem icon-spin" d="M60 50 L70 60 L60 70 L50 60 Z"/>
-      </svg>
-      <p class="field-copy">¿Tu empresa ya quiere algo que nadie más tiene? Ese camino se
-        llama <a href="#contacto">Labs</a>: software a la medida, automatización e
-        inteligencia artificial aplicada a cómo trabajas.</p>
-      <h2 class="field-phrase">Momento de reinventarse</h2>
+
+    <div class="row row-flip">
+      <figure class="photo">
+        <img src="/images/camino-reinventarse.webp"
+          srcset="/images/camino-reinventarse-1000.webp 1000w, /images/camino-reinventarse.webp 2000w"
+          sizes="(max-width: 900px) 100vw, 46vw"
+          alt="Pantalla con código de programación en un editor oscuro" width="2000" height="1333" loading="lazy">
+      </figure>
+      <div class="row-copy">
+        <h2>¿Quieres reinventarte?</h2>
+        <p>Ese camino se llama <a href="#contacto">Labs</a>: software a la medida,
+          automatización e inteligencia artificial aplicada a cómo trabaja tu empresa.
+          Para quien ya quiere algo que nadie más tiene.</p>
+      </div>
     </div>
-    <div class="field field-pink">
-      <svg class="field-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
-        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <rect pathLength="1" x="10" y="18" width="100" height="84" rx="6"/>
-        <path pathLength="1" d="M10 36 H110"/>
-        <circle pathLength="1" cx="22" cy="27" r="2.6"/><circle pathLength="1" cx="33" cy="27" r="2.6"/>
-        <path pathLength="1" d="M60 48 L81 60 V80 L60 92 L39 80 V60 Z"/>
-        <path pathLength="1" class="icon-gem" d="M60 60 L68 70 L60 80 L52 70 Z"/>
-      </svg>
-      <p class="field-copy">Trabajemos el camino que trabajemos, todo empieza por
-        <a href="#radar">medir tu negocio</a>: tu diagnóstico, tus entregables y el
-        avance del proyecto viven en tu portal de cliente.</p>
-      <h2 class="field-phrase">Momento de verlo todo</h2>
+
+    <div class="row">
+      <div class="portal-ui" data-ui aria-label="Vista del portal de clientes">
+        <div class="pu-bar"><i></i><i></i><i></i></div>
+        <div class="pu-body">
+          <div class="pu-side"><u class="on"></u><u></u><u></u><u></u></div>
+          <div class="pu-main">
+            <div class="pu-card">
+              <svg viewBox="0 0 60 54" width="40" height="36" aria-hidden="true">
+                <path d="M30 2 L55 15 V39 L30 52 L5 39 V15 Z" fill="none" stroke="#809dac" stroke-width="2" opacity=".6"/>
+                <path d="M30 12 L45 20 V36 L30 44 L15 36 V22 Z" fill="#f55786" fill-opacity=".25" stroke="#f55786" stroke-width="2.5"/>
+              </svg>
+              <u class="w"></u><u></u>
+            </div>
+            <div class="pu-card">
+              <u class="w"></u>
+              <div class="pu-progress"><i></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row-copy">
+        <h2>Tu proyecto, siempre a la vista</h2>
+        <p>Trabajemos el camino que trabajemos, tienes tu portal de cliente: tu
+          diagnóstico, tus entregables y el avance del proyecto, sin quedarte a ciegas.
+          <a href="#radar">Todo empieza por medir tu negocio.</a></p>
+      </div>
     </div>
   </section>
 
   <!-- RADAR · lo vivo -->
   <section id="radar" class="radar" aria-label="El Radar">
-    <h2 class="radar-sentence radar-above">Primero medimos.</h2>
+    <h2 class="section-title">Mide tu negocio hoy.</h2>
     <div class="radar-stage">
       <div class="radar-frame" data-ui>
         <svg id="radarChart" viewBox="-55 0 450 300" role="img" aria-label="Hexágono del Radar con tus seis ejes"></svg>
@@ -125,53 +143,58 @@
             <input type="range" min="1" max="5" step="1" value="3" name="finanzas"></label>
         </form>
       </div>
-      <p class="radar-caption">Mueve los seis ejes como ves hoy tu negocio. Esta es la misma
-        herramienta con la que arrancamos cada proyecto: en una sesión la corremos contigo,
-        con calma y con preguntas de verdad.</p>
-    </div>
-    <h2 class="radar-sentence radar-below">Luego construimos.</h2>
-    <p class="bridge bridge-radar">Y construir con nosotros se siente así,
-      mes a mes:</p>
-  </section>
-
-  <!-- MÉTODO · un verbo a la vez, sobre un solo fluido continuo -->
-  <section id="metodo" aria-label="Método">
-    <div class="metodo-bg" aria-hidden="true">
-      <div class="metodo-stage">
-        <img class="verb-bg" src="/assets/brand/mesh-4.png" alt="Arte de marca de Vertex Labs: degradado azul marino, ciruela y fresa" width="2400" height="1349" loading="lazy">
-      </div>
-    </div>
-    <div class="verb-panel">
-      <div class="verb-stack">
-        <h2 class="verb">Entender</h2>
-        <p class="verb-copy">Nos sentamos contigo y entendemos cómo funciona tu negocio,
-          antes de hablar de tecnología.</p>
-      </div>
-    </div>
-    <div class="verb-panel">
-      <div class="verb-stack">
-        <h2 class="verb">Medir</h2>
-        <p class="verb-copy">Corremos tu Radar y encontramos el eje donde una mejora
-          mueve más resultados.</p>
-      </div>
-    </div>
-    <div class="verb-panel">
-      <div class="verb-stack">
-        <h2 class="verb">Construir</h2>
-        <p class="verb-copy">Construimos por etapas: cada semana ves avance real
-          en tu portal de cliente.</p>
-      </div>
-    </div>
-    <div class="verb-panel">
-      <div class="verb-stack">
-        <h2 class="verb">Acompañar</h2>
-        <p class="verb-copy">No entregamos y desaparecemos: operamos, medimos
-          y mejoramos contigo, mes a mes.</p>
-      </div>
+      <p class="radar-caption">Mueve los seis ejes como ves hoy tu negocio. Esta es la
+        misma herramienta con la que arrancamos cada proyecto: en una sesión la corremos
+        contigo, con calma y con preguntas de verdad.</p>
     </div>
   </section>
 
-  <!-- PRUEBA · nombres como una frase -->
+  <!-- MÉTODO · timeline editorial -->
+  <section id="metodo" class="metodo" aria-label="Método">
+    <h2 class="section-title">Así trabajamos.</h2>
+    <ol class="timeline">
+      <li>
+        <svg class="step-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <circle pathLength="1" cx="52" cy="52" r="30"/>
+          <path pathLength="1" d="M74 74 L100 100"/>
+          <path pathLength="1" class="icon-gem" d="M52 42 L61 52 L52 62 L43 52 Z"/>
+        </svg>
+        <h3>Entender</h3>
+        <p>Nos sentamos contigo antes de hablar de tecnología.</p>
+      </li>
+      <li>
+        <svg class="step-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path pathLength="1" d="M60 12 L101 36 V84 L60 108 L19 84 V36 Z"/>
+          <path pathLength="1" class="icon-gem" d="M60 50 L70 60 L60 70 L50 60 Z"/>
+        </svg>
+        <h3>Medir</h3>
+        <p>El Radar encuentra el eje donde una mejora mueve más.</p>
+      </li>
+      <li>
+        <svg class="step-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path pathLength="1" d="M8 104 L38 64 L56 82 L100 28"/>
+          <path pathLength="1" d="M78 28 H100 V50"/>
+          <path pathLength="1" class="icon-gem" d="M38 55 L47 64 L38 73 L29 64 Z"/>
+        </svg>
+        <h3>Construir</h3>
+        <p>Por etapas, con avance visible cada semana en tu portal.</p>
+      </li>
+      <li>
+        <svg class="step-icon draw-icon" viewBox="0 0 120 120" aria-hidden="true" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path pathLength="1" d="M10 84 C 34 44, 56 118, 82 60 S 104 38, 110 46"/>
+          <path pathLength="1" class="icon-gem" d="M82 50 L91 60 L82 70 L73 60 Z"/>
+        </svg>
+        <h3>Acompañar</h3>
+        <p>Operamos y mejoramos contigo, mes a mes.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- PRUEBA · ya corre hoy -->
   <section class="proof" aria-label="Prueba">
     <div class="proof-grid">
       <div>
@@ -193,10 +216,10 @@
   <!-- CTA · una frase con un hueco -->
   <section id="contacto" class="cta" aria-label="Contacto">
     <form class="cta-sentence" id="ctaForm" action="mailto:vctr.mnl.s.m@gmail.com" method="get">
-      <h2 class="cta-line">Tu momento empieza aquí:
+      <h2 class="cta-line">Empieza con tu correo:
         <label class="visually-hidden" for="ctaEmail">Tu correo</label><input
           id="ctaEmail" name="correo" type="email" required placeholder="tu correo"
-          autocomplete="email"><button class="cta-send" type="submit">y empezamos.</button>
+          autocomplete="email"><button class="cta-send" type="submit">y hablamos.</button>
       </h2>
     </form>
     <p class="cta-note">Te escribimos en menos de un día hábil. Sin compromiso y sin humo.</p>
@@ -204,14 +227,11 @@
 
 </main>
 
-<!-- CIERRE + FOOTER · invitación sobre el nombre recortado -->
+<!-- FOOTER · papel, wordmark recortado -->
 <footer class="footer">
-  <div class="aurora aurora-footer" aria-hidden="true">
-    <i class="a-plum"></i><i class="a-pink"></i>
-  </div>
   <div class="footer-top">
     <div class="footer-invite">
-      <img class="hourglass" src="/assets/brand/isotipo-white.svg" alt="" width="64" height="58">
+      <img class="hourglass" src="/assets/brand/isotipo-navy.svg" alt="" width="56" height="51">
       <p class="footer-ask">¿Empezamos por saber dónde estás?</p>
       <a class="btn btn-accent" href="#radar">Corre tu Radar gratis</a>
     </div>
@@ -224,10 +244,10 @@
   </div>
   <div class="footer-credits">
     <span>© 2026 Vertex Labs</span>
-    <span>Identidad visual: CHOPCHOP</span>
+    <span>Identidad visual: CHOPCHOP · Fotos: Pixabay (créditos en /ASSETS.md)</span>
   </div>
   <div class="footer-wordmark" aria-hidden="true">
-    <img src="/assets/brand/wordmark-white.svg" alt="" width="1633" height="180">
+    <img src="/assets/brand/wordmark-navy.svg" alt="" width="1633" height="180">
   </div>
 </footer>
 

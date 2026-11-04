@@ -1,6 +1,6 @@
-/* Vertex Labs — capa de motion (GSAP + ScrollTrigger)
-   Todo vive dentro de matchMedia: con prefers-reduced-motion
-   la página queda completa y quieta. */
+/* Vertex Labs — capa de motion (GSAP + ScrollTrigger + Lenis)
+   Lenguaje papel editorial: el movimiento vive en las fotos, los trazos
+   y el scroll. Con prefers-reduced-motion la página queda completa y quieta. */
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,135 +14,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
 /* scroll con inercia; expuesto para que el preloader lo detenga/arranque */
 export let lenis = null;
 
-/* Parte un elemento en palabras y caracteres (el texto del DOM sigue íntegro). */
-function splitChars(el) {
-  if (el.dataset.split) return el.querySelectorAll(".ch");
-  const words = el.textContent.trim().split(/\s+/);
-  el.dataset.split = "1";
-  el.innerHTML = "";
-  words.forEach((word, wi) => {
-    const w = document.createElement("span");
-    w.className = "word";
-    for (const ch of word) {
-      const s = document.createElement("span");
-      s.className = "ch";
-      s.textContent = ch;
-      w.appendChild(s);
-    }
-    el.appendChild(w);
-    if (wi < words.length - 1) el.appendChild(document.createTextNode(" "));
-  });
-  return el.querySelectorAll(".ch");
-}
-
-/* ---------- fluido de marca: un solo canvas continuo para todo el método.
-   Cada blob tiene un punto de reposo por pantalla (waypoint); el scroll
-   interpola entre ellos, así el fluido se reacomoda al subir y al bajar. */
-const FLUID_BLOBS = [
-  { hex: "#203441", r: 0.62, wp: [[0.18, 0.25], [0.80, 0.30], [0.25, 0.75], [0.70, 0.20]] },
-  { hex: "#6e2451", r: 0.56, wp: [[0.75, 0.70], [0.25, 0.60], [0.80, 0.25], [0.30, 0.80]] },
-  { hex: "#f55786", r: 0.50, wp: [[0.50, 0.85], [0.65, 0.15], [0.15, 0.30], [0.85, 0.65]] },
-  { hex: "#6e2451", r: 0.44, wp: [[0.10, 0.80], [0.90, 0.75], [0.55, 0.10], [0.15, 0.35]] },
-  { hex: "#f55786", r: 0.40, wp: [[0.85, 0.15], [0.15, 0.20], [0.60, 0.60], [0.50, 0.90]] },
-];
-
-function hexRgb(hex) {
-  const n = parseInt(hex.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-
-const lerp = (a, b, f) => a + (b - a) * f;
-const smooth = (f) => f * f * (3 - 2 * f);
-
-function mountMetodoFluid() {
-  const stage = document.querySelector(".metodo-stage");
-  const section = document.getElementById("metodo");
-  if (!stage || !section) return () => {};
-
-  const cv = document.createElement("canvas");
-  cv.className = "verb-fluid";
-  cv.width = 192;
-  cv.height = 108;
-  stage.appendChild(cv);
-  const ctx = cv.getContext("2d");
-  const W = cv.width, H = cv.height;
-
-  const blobs = FLUID_BLOBS.map((b, j) => ({
-    rgb: hexRgb(b.hex),
-    r: b.r * W,
-    wp: b.wp,
-    sx: 0.8 + 0.22 * j,
-    sy: 0.65 + 0.18 * j,
-    ox: j * 2.3,
-    oy: j * 4.7,
-  }));
-
-  let progress = 0, shown = 0, t = 0, visible = false, raf = 0;
-  let mx = -9, my = -9;
-
-  ScrollTrigger.create({
-    trigger: section, start: "top bottom", end: "bottom top", scrub: true,
-    onUpdate: (self) => { progress = self.progress; },
-  });
-
-  /* el blob más cercano al cursor crece un poco */
-  const onMouse = (e) => {
-    mx = (e.clientX / innerWidth) * W;
-    my = (e.clientY / innerHeight) * H;
-  };
-  const offMouse = () => { mx = -9; my = -9; };
-  section.addEventListener("mousemove", onMouse, { passive: true });
-  section.addEventListener("mouseleave", offMouse, { passive: true });
-
-  function frame() {
-    if (!visible) return;
-    t += 0.0045;
-    shown += (progress - shown) * 0.08;
-    /* posición entre waypoints: 4 pantallas → índice 0..3 */
-    const k = Math.min(Math.max(shown * 4.6 - 0.8, 0), 3);
-    const i0 = Math.floor(k), i1 = Math.min(i0 + 1, 3), f = smooth(k - i0);
-
-    ctx.fillStyle = "#203441";
-    ctx.fillRect(0, 0, W, H);
-    for (const b of blobs) {
-      const bx = lerp(b.wp[i0][0], b.wp[i1][0], f);
-      const by = lerp(b.wp[i0][1], b.wp[i1][1], f);
-      const x = (bx + 0.07 * Math.sin(t * b.sx + b.ox)) * W;
-      const y = (by + 0.07 * Math.cos(t * b.sy + b.oy)) * H;
-      const near = Math.hypot(x - mx, y - my) < b.r * 0.9 ? 1.12 : 1;
-      b.boost = (b.boost || 1) + (near - (b.boost || 1)) * 0.06;
-      const radius = b.r * b.boost;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
-      const [r, gg, bb] = b.rgb;
-      g.addColorStop(0, `rgba(${r},${gg},${bb},0.9)`);
-      g.addColorStop(1, `rgba(${r},${gg},${bb},0)`);
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    raf = requestAnimationFrame(frame);
-  }
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      visible = e.isIntersecting;
-      cancelAnimationFrame(raf);
-      if (visible) raf = requestAnimationFrame(frame);
-    });
-  }, { rootMargin: "60% 0px" });
-  io.observe(section);
-
-  return () => {
-    cancelAnimationFrame(raf);
-    io.disconnect();
-    section.removeEventListener("mousemove", onMouse);
-    section.removeEventListener("mouseleave", offMouse);
-    cv.remove();
-  };
-}
-
-/* ---------- preloader: carga real (fuentes + poster), techo 2.5 s ---------- */
+/* ---------- preloader: carga real (fuentes + foto del hero), techo 2.5 s ---------- */
 function runPreloader(onDone) {
   const pre = document.getElementById("preloader");
   if (!pre) { onDone(); return; }
@@ -172,11 +44,11 @@ function runPreloader(onDone) {
   };
 
   document.fonts.ready.then(() => bump(55));
-  const poster = new Image();
-  poster.src = "/video/arena-poster.jpg";
-  const posterReady = poster.decode().catch(() => {});
-  posterReady.then(() => bump(90));
-  Promise.all([document.fonts.ready, posterReady]).then(finish);
+  const heroImg = new Image();
+  heroImg.src = "/images/hero-negocio-1000.webp";
+  const imgReady = heroImg.decode().catch(() => {});
+  imgReady.then(() => bump(90));
+  Promise.all([document.fonts.ready, imgReady]).then(finish);
   gsap.delayedCall(2.5, finish);
 }
 
@@ -272,67 +144,48 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   };
   document.addEventListener("click", onAnchorClick);
 
-  /* ---------- hero: aurora viva, palabras que emergen, reloj que respira ---------- */
-  document.querySelectorAll(".hero .aurora i").forEach((blob, i) => {
-    gsap.to(blob, {
-      xPercent: gsap.utils.random(-34, 34),
-      yPercent: gsap.utils.random(-26, 26),
-      scale: gsap.utils.random(1.1, 1.45),
-      duration: gsap.utils.random(6, 10),
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-      delay: i * 0.8,
-    });
-  });
-
+  /* ---------- hero: palabras que emergen + la foto se abre ---------- */
   const heroIntro = gsap.timeline({ paused: true });
   heroIntro
-    .from(".hw", { yPercent: 118, duration: 0.9, ease: "power3.out", stagger: 0.09 })
-    .add(() => document.documentElement.classList.add("shutter-open"), "-=0.55")
+    .from(".hw", { yPercent: 118, duration: 0.9, ease: "power3.out", stagger: 0.07 })
     .from(".hero-sub, .hero-actions, .scrollcue", {
-      y: 26, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.1,
-    }, "-=0.35");
+      y: 26, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.1,
+      clearProps: "opacity,visibility,transform",
+    }, "-=0.45")
+    .fromTo(".hero-photo img", { scale: 1.18 }, {
+      scale: 1.04, duration: 1.6, ease: "power2.out",
+    }, "-=0.8");
   runPreloader(() => heroIntro.play());
 
-  gsap.to(".hero-sentence", {
-    yPercent: -9, ease: "none",
-    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
-  });
-  gsap.to(".hero .aurora", {
-    yPercent: 18, ease: "none",
-    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
+  /* ---------- fotos: parallax interno sutil al hacer scroll ---------- */
+  document.querySelectorAll(".photo img").forEach((img) => {
+    gsap.fromTo(img, { yPercent: -5, scale: 1.12 }, {
+      yPercent: 5, scale: 1.12, ease: "none",
+      scrollTrigger: { trigger: img.closest(".photo"), start: "top bottom", end: "bottom top", scrub: true },
+    });
   });
 
-  /* ---------- caminos: frases por carácter + iconos que aparecen en fade ---------- */
-  document.querySelectorAll(".field").forEach((field) => {
-    const chars = splitChars(field.querySelector(".field-phrase"));
-    gsap.from(chars, {
-      yPercent: 115, duration: 0.7, ease: "power3.out", stagger: 0.028,
-      scrollTrigger: { trigger: field, start: "top 62%", once: true },
-    });
-    gsap.from(field.querySelector(".field-copy"), {
-      y: 30, opacity: 0, duration: 0.8, ease: "power2.out",
-      scrollTrigger: { trigger: field, start: "top 62%", once: true },
-    });
-
-    const icon = field.querySelector(".draw-icon");
-    if (icon) {
-      const strokes = icon.querySelectorAll("[pathLength]");
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: field, start: "top 85%", end: "center 45%", scrub: 0.8 },
-      });
-      tl.fromTo(strokes, { opacity: 0 }, { opacity: 1, duration: 0.45, stagger: 0.12, ease: "power1.in" }, 0)
-        .fromTo(strokes, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 1, stagger: 0.12, ease: "power1.inOut" }, 0.08);
-      gsap.from(icon, {
-        y: 40, ease: "none",
-        scrollTrigger: { trigger: field, start: "top bottom", end: "bottom top", scrub: true },
+  /* ---------- filas editoriales: foto se revela, texto sube ---------- */
+  document.querySelectorAll(".row").forEach((row) => {
+    const media = row.querySelector(".photo, .portal-ui");
+    if (media) {
+      gsap.fromTo(media, { clipPath: "inset(10% 10% 10% 10%)", autoAlpha: 0.4 }, {
+        clipPath: "inset(0% 0% 0% 0%)", autoAlpha: 1, duration: 1, ease: "power3.out",
+        immediateRender: false,
+        clearProps: "opacity,visibility,transform",
+        scrollTrigger: { trigger: row, start: "top 72%", once: true },
       });
     }
+    gsap.from(row.querySelector(".row-copy"), {
+      y: 36, autoAlpha: 0, duration: 0.9, ease: "power2.out",
+      immediateRender: false,
+      clearProps: "opacity,visibility,transform",
+      scrollTrigger: { trigger: row, start: "top 72%", once: true },
+    });
   });
 
-  /* ---------- voz del narrador: reveal por palabra, scrubbed, tinta ciruela ---------- */
-  document.querySelectorAll(".bridge, .radar-above, .radar-below, .proof-head").forEach((el) => {
+  /* ---------- voz del narrador: reveal por palabra, scrubbed ---------- */
+  document.querySelectorAll(".bridge, .proof-head").forEach((el) => {
     const split = SplitText.create(el, { type: "words", aria: "none" });
     gsap.fromTo(split.words, { opacity: 0.15 }, {
       opacity: 1, stagger: 0.06, ease: "none",
@@ -340,9 +193,14 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
   });
 
-  /* diamante del hexágono de Labs: gira sin prisa */
-  gsap.to(".icon-spin", {
-    rotation: 360, transformOrigin: "50% 50%", duration: 9, ease: "none", repeat: -1,
+  /* títulos de sección */
+  document.querySelectorAll(".section-title").forEach((el) => {
+    gsap.from(el, {
+      y: 40, autoAlpha: 0, duration: 0.9, ease: "power3.out",
+      immediateRender: false,
+      clearProps: "opacity,visibility,transform",
+      scrollTrigger: { trigger: el, start: "top 82%", once: true },
+    });
   });
 
   /* ---------- radar: el hexágono se dibuja al llegar ---------- */
@@ -368,50 +226,58 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
       },
     });
     gsap.from(".radar-frame", {
-      y: 60, opacity: 0, duration: 0.9, ease: "power2.out",
+      y: 60, autoAlpha: 0, duration: 0.9, ease: "power2.out",
+      immediateRender: false,
+      clearProps: "opacity,visibility,transform",
       scrollTrigger: { trigger: "#radar", start: "top 65%", once: true },
     });
     gsap.from(".radar-caption", {
-      y: 30, opacity: 0, duration: 0.8,
+      y: 30, autoAlpha: 0, duration: 0.8,
+      immediateRender: false,
+      clearProps: "opacity,visibility,transform",
       scrollTrigger: { trigger: ".radar-stage", start: "top 60%", once: true },
     });
   }
 
-  /* ---------- método: fluido continuo + verbo y texto suben juntos ---------- */
-  const cleanupFluid = mountMetodoFluid();
-  document.querySelectorAll(".verb-panel").forEach((panel) => {
-    gsap.from(panel.querySelector(".verb-stack"), {
-      yPercent: 36, scale: 0.96, ease: "power2.out",
-      scrollTrigger: { trigger: panel, start: "top 92%", end: "top 38%", scrub: 0.4 },
+  /* ---------- método: los trazos se dibujan, los pasos entran en cascada ---------- */
+  document.querySelectorAll(".timeline li").forEach((li, i) => {
+    gsap.from(li, {
+      y: 44, autoAlpha: 0, duration: 0.8, ease: "power2.out", delay: i * 0.1,
+      immediateRender: false,
+      clearProps: "opacity,visibility,transform",
+      scrollTrigger: { trigger: ".timeline", start: "top 78%", once: true },
     });
+    const strokes = li.querySelectorAll("[pathLength]");
+    gsap.set(strokes, { strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 });
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: ".timeline", start: "top 85%", end: "top 35%", scrub: 0.8 },
+    });
+    tl.to(strokes, { opacity: 1, duration: 0.4, stagger: 0.1, ease: "power1.in" }, i * 0.12)
+      .to(strokes, { drawSVG: "0% 100%", duration: 0.9, stagger: 0.1, ease: "power1.inOut" }, i * 0.12 + 0.05);
   });
 
   /* ---------- prueba y cta ---------- */
   mountProofRadar();
   gsap.from(".proof-sentence, .proof-media", {
-    y: 34, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
+    y: 34, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
+    immediateRender: false,
+    clearProps: "opacity,visibility,transform",
     scrollTrigger: { trigger: ".proof", start: "top 68%", once: true },
   });
   gsap.from(".cta-line, .cta-note", {
-    y: 30, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
+    y: 30, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
+    immediateRender: false,
+    clearProps: "opacity,visibility,transform",
     scrollTrigger: { trigger: ".cta", start: "top 72%", once: true },
   });
 
-  /* ---------- footer: aurora, isotipo que se voltea y wordmark que sube ---------- */
-  document.querySelectorAll(".aurora-footer i").forEach((blob, i) => {
-    gsap.to(blob, {
-      xPercent: gsap.utils.random(-18, 18),
-      yPercent: gsap.utils.random(-12, 12),
-      scale: gsap.utils.random(1.1, 1.35),
-      duration: gsap.utils.random(12, 18),
-      ease: "sine.inOut", yoyo: true, repeat: -1, delay: i * 1.5,
-    });
-  });
-
+  /* ---------- footer: isotipo que se voltea y wordmark que sube ---------- */
   const hourglass = document.querySelector(".hourglass");
   if (hourglass) {
     gsap.from(hourglass, {
       autoAlpha: 0, y: 20, duration: 0.8,
+      immediateRender: false,
+      clearProps: "opacity,visibility,transform",
       scrollTrigger: { trigger: ".footer", start: "top 75%", once: true },
     });
     /* el reloj de arena se voltea cada tanto, como quien espera */
@@ -421,7 +287,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
   }
 
-  gsap.fromTo(".footer-wordmark", { yPercent: 42 }, {
+  gsap.fromTo(".footer-wordmark", { yPercent: 46 }, {
     yPercent: 0, ease: "none",
     scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true },
   });
@@ -430,12 +296,12 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     { y: 30, autoAlpha: 0 },
     {
       y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1,
+      immediateRender: false,
       clearProps: "opacity,visibility,transform",
       scrollTrigger: { trigger: ".footer", start: "top 70%", once: true },
     });
 
   return () => {
-    cleanupFluid();
     document.removeEventListener("click", onAnchorClick);
     gsap.ticker.remove(raf);
     lenis.destroy();
@@ -443,7 +309,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   };
 });
 
-/* ---------- desktop con puntero fino: cursor y micro-interacciones ---------- */
+/* ---------- desktop con puntero fino: cursor, 3D y magnéticos ---------- */
 mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
   const unmountCursor = mountCursor();
 
@@ -482,42 +348,14 @@ mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
     });
   });
 
-  /* campos: el icono sigue al mouse y el gradiente se desplaza */
-  const fieldFx = [];
-  document.querySelectorAll(".field").forEach((field) => {
-    const icon = field.querySelector(".field-icon");
-    const ix = icon && gsap.quickTo(icon, "x", { duration: 0.5, ease: "power2" });
-    const rot = icon && gsap.quickTo(icon, "rotation", { duration: 0.5, ease: "power2" });
-    const pos = { x: 30, y: 40 };
-    const apply = () => { field.style.backgroundPosition = `${pos.x}% ${pos.y}%`; };
-    const move = (e) => {
-      const r = field.getBoundingClientRect();
-      const dx = (e.clientX - r.left) / r.width - 0.5;
-      const dy = (e.clientY - r.top) / r.height - 0.5;
-      if (icon) { ix(dx * 14); rot(dx * 4); }
-      gsap.to(pos, { x: 30 + dx * 26, y: 40 + dy * 16, duration: 0.8, ease: "power2.out", onUpdate: apply, overwrite: true });
-    };
-    const leave = () => {
-      if (icon) { ix(0); rot(0); }
-      gsap.to(pos, { x: 30, y: 40, duration: 0.9, ease: "power2.out", onUpdate: apply, overwrite: true });
-    };
-    field.addEventListener("mousemove", move, { passive: true });
-    field.addEventListener("mouseleave", leave, { passive: true });
-    fieldFx.push(() => {
-      field.removeEventListener("mousemove", move);
-      field.removeEventListener("mouseleave", leave);
-    });
-  });
-
   return () => {
     unmountCursor();
     cleanup3d?.();
     magnets.forEach((fn) => fn());
-    fieldFx.forEach((fn) => fn());
   };
 });
 
-/* reduced-motion: el radar de la prueba se muestra dibujado y quieto */
+/* reduced-motion: sin preloader y el radar de la prueba dibujado y quieto */
 mm.add("(prefers-reduced-motion: reduce)", () => {
   document.getElementById("preloader")?.remove();
   const svg = document.getElementById("proofRadar");
