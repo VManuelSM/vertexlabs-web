@@ -4,9 +4,11 @@
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import Lenis from "lenis";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
 
 /* scroll con inercia; expuesto para que el preloader lo detenga/arranque */
 export let lenis = null;
@@ -262,17 +264,25 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     const icon = field.querySelector(".draw-icon");
     if (icon) {
       const strokes = icon.querySelectorAll("[pathLength]");
-      gsap.set(strokes, { strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 });
       const tl = gsap.timeline({
         scrollTrigger: { trigger: field, start: "top 85%", end: "center 45%", scrub: 0.8 },
       });
-      tl.to(strokes, { opacity: 1, duration: 0.45, stagger: 0.12, ease: "power1.in" }, 0)
-        .to(strokes, { strokeDashoffset: 0, duration: 1, stagger: 0.12, ease: "power1.inOut" }, 0.08);
+      tl.fromTo(strokes, { opacity: 0 }, { opacity: 1, duration: 0.45, stagger: 0.12, ease: "power1.in" }, 0)
+        .fromTo(strokes, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 1, stagger: 0.12, ease: "power1.inOut" }, 0.08);
       gsap.from(icon, {
         y: 40, ease: "none",
         scrollTrigger: { trigger: field, start: "top bottom", end: "bottom top", scrub: true },
       });
     }
+  });
+
+  /* ---------- voz del narrador: reveal por palabra, scrubbed, tinta ciruela ---------- */
+  document.querySelectorAll(".bridge, .radar-above, .radar-below, .proof-head").forEach((el) => {
+    const split = SplitText.create(el, { type: "words", aria: "none" });
+    gsap.fromTo(split.words, { opacity: 0.15 }, {
+      opacity: 1, stagger: 0.06, ease: "none",
+      scrollTrigger: { trigger: el, start: "top 86%", end: "top 45%", scrub: 0.5 },
+    });
   });
 
   /* diamante del hexágono de Labs: gira sin prisa */
@@ -306,14 +316,6 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
       y: 60, opacity: 0, duration: 0.9, ease: "power2.out",
       scrollTrigger: { trigger: "#radar", start: "top 65%" },
     });
-    gsap.from(".radar-above", {
-      x: -60, opacity: 0, duration: 0.9, ease: "power3.out",
-      scrollTrigger: { trigger: "#radar", start: "top 70%" },
-    });
-    gsap.from(".radar-below", {
-      x: 60, opacity: 0, duration: 0.9, ease: "power3.out",
-      scrollTrigger: { trigger: ".radar-below", start: "top 85%" },
-    });
     gsap.from(".radar-caption", {
       y: 30, opacity: 0, duration: 0.8,
       scrollTrigger: { trigger: ".radar-stage", start: "top 60%" },
@@ -331,21 +333,13 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 
   /* ---------- prueba y cta ---------- */
   mountProofRadar();
-  gsap.from(".proof-head, .proof-sentence, .proof-media", {
+  gsap.from(".proof-sentence, .proof-media", {
     y: 34, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
     scrollTrigger: { trigger: ".proof", start: "top 68%" },
   });
   gsap.from(".cta-line, .cta-note", {
     y: 30, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
     scrollTrigger: { trigger: ".cta", start: "top 72%" },
-  });
-
-  /* puentes narrativos */
-  document.querySelectorAll(".bridge").forEach((b) => {
-    gsap.from(b, {
-      y: 30, opacity: 0, duration: 0.8, ease: "power2.out",
-      scrollTrigger: { trigger: b, start: "top 80%" },
-    });
   });
 
   /* ---------- footer: aurora, isotipo que se voltea y wordmark que sube ---------- */

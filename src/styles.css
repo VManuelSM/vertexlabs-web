@@ -341,7 +341,7 @@ a { color: inherit; }
 .field-mirror .field-copy { grid-column: 1 / 6; }
 .field-mirror .field-phrase { justify-self: end; text-align: right; }
 
-/* puentes narrativos entre secciones */
+/* puentes narrativos entre secciones: la voz del narrador, en ciruela */
 .bridge {
   font-size: var(--s3);
   font-weight: 700;
@@ -352,7 +352,10 @@ a { color: inherit; }
   margin: 0 auto;
   padding: var(--gap-section) var(--margin);
   text-wrap: balance;
+  color: var(--plum);
 }
+.proof-head { color: var(--plum); }
+.radar-sentence { color: var(--plum); }
 .bridge-radar { padding-bottom: 0; padding-top: calc(var(--gap-section) / 2); }
 #caminos .bridge { padding-top: calc(var(--gap-section) / 2); }
 
