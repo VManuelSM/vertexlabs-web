@@ -235,11 +235,6 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     y: 26, opacity: 0, duration: 0.8, ease: "power2.out", stagger: 0.1, delay: 0.8,
   });
 
-  /* el reloj respira: zoom lentísimo de ida y vuelta, siempre */
-  gsap.to(".hero-slot img", {
-    scale: 1.09, duration: 7, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 2,
-  });
-
   gsap.to(".hero-sentence", {
     yPercent: -9, ease: "none",
     scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },

@@ -8,8 +8,8 @@ window.addEventListener("load", () => {
   document.documentElement.classList.add("shutter-open");
 });
 
-/* ---------- video: quieto si el visitante pide menos movimiento ---------- */
-if (reduced) {
+/* ---------- video: quieto con reduced-motion o con ahorro de datos ---------- */
+if (reduced || navigator.connection?.saveData) {
   document.querySelectorAll("video[autoplay]").forEach((v) => {
     v.removeAttribute("autoplay");
     v.pause();
