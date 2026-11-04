@@ -214,7 +214,13 @@ a { color: inherit; }
   padding: 0 var(--margin) 40px;
   overflow: clip;
 }
-.hero > :not(.aurora) { position: relative; z-index: 1; }
+.hero > :not(.aurora):not(.hero3d) { position: relative; z-index: 1; }
+.hero3d {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 
 /* ---------- aurora: gradientes de marca vivos (pedido explícito) ---------- */
 .aurora {

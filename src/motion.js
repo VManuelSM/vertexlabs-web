@@ -444,6 +444,22 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
   const unmountCursor = mountCursor();
 
+  /* capa 3D del hero, diferida: no toca el bundle inicial */
+  let heroProgress = 0;
+  let cleanup3d = null;
+  ScrollTrigger.create({
+    trigger: ".hero", start: "top top", end: "bottom top", scrub: true,
+    onUpdate: (self) => { heroProgress = self.progress; },
+  });
+  if (innerWidth >= 1024) {
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 600));
+    idle(() => {
+      import("./hero3d.js").then((m) => {
+        cleanup3d = m.mountHero3D(document.querySelector(".hero"), () => heroProgress);
+      });
+    });
+  }
+
   /* botones magnéticos */
   const magnets = [];
   document.querySelectorAll(".btn-accent, .nav-cta, .cta-send").forEach((btn) => {
@@ -492,6 +508,7 @@ mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
 
   return () => {
     unmountCursor();
+    cleanup3d?.();
     magnets.forEach((fn) => fn());
     fieldFx.forEach((fn) => fn());
   };
