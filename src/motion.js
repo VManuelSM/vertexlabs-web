@@ -4,8 +4,12 @@
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/* scroll con inercia; expuesto para que el preloader lo detenga/arranque */
+export let lenis = null;
 
 /* Parte un elemento en palabras y caracteres (el texto del DOM sigue íntegro). */
 function splitChars(el) {
@@ -191,6 +195,23 @@ function mountProofRadar() {
 const mm = gsap.matchMedia();
 
 mm.add("(prefers-reduced-motion: no-preference)", () => {
+  /* ---------- Lenis: una sola instancia, sincronizada con ScrollTrigger ---------- */
+  lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  lenis.on("scroll", ScrollTrigger.update);
+  const raf = (t) => lenis.raf(t * 1000);
+  gsap.ticker.add(raf);
+  gsap.ticker.lagSmoothing(0);
+
+  const onAnchorClick = (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const target = document.querySelector(a.getAttribute("href"));
+    if (!target) return;
+    e.preventDefault();
+    lenis.scrollTo(target, { offset: -70 });
+  };
+  document.addEventListener("click", onAnchorClick);
+
   /* ---------- hero: aurora viva, palabras que emergen, reloj que respira ---------- */
   document.querySelectorAll(".hero .aurora i").forEach((blob, i) => {
     gsap.to(blob, {
@@ -361,7 +382,13 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     scrollTrigger: { trigger: ".footer", start: "top 70%" },
   });
 
-  return () => cleanupFluid();
+  return () => {
+    cleanupFluid();
+    document.removeEventListener("click", onAnchorClick);
+    gsap.ticker.remove(raf);
+    lenis.destroy();
+    lenis = null;
+  };
 });
 
 /* reduced-motion: el radar de la prueba se muestra dibujado y quieto */
