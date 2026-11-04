@@ -1,13 +1,15 @@
 # Assets externos
 
-- `video/arena.webm` + poster — generado con manimgx (escena propia, colores de marca). Sin licencia de terceros.
-- Logos y Efectos en `assets/brand/` — paquete de identidad oficial (CHOPCHOP) propiedad de Vertex Labs.
-- `images/hero-local.webp` — "cafe, barista, coffee shop, counter, coffee machine, caffeine, interior design, interior decoration, indoors, menu, coffee menu, cafe, cafe, cafe, cafe, cafe, coffee shop, coffee shop, coffee shop, coffee shop, menu" por Pexels, Pixabay Content License, https://pixabay.com/photos/cafe-barista-coffee-shop-counter-1869656/
-- `images/camino-crecer.webp` — "bakery, breads, assorted, assortment, bread shop, food, pastries, shop, store, freshly baked, bakery, bakery, bakery, bakery, bakery, shop" por Pexels, Pixabay Content License, https://pixabay.com/photos/bakery-breads-assorted-assortment-1868925/
-- `images/camino-reinventarse.webp` — "code, coding, computer, data, developing, development, ethernet, html, programmer, programming, screen, software, technology, work, code, code, coding, coding, coding, coding, coding, computer, computer, computer, computer, data, programming, programming, programming, software, software, technology, technology, technology, technology" por Pexels, Pixabay Content License, https://pixabay.com/photos/code-coding-computer-data-1839406/
-- `images/camino-crecer2.webp` — "senior, work, bazaar, people, woman, adult, portrait, man, fruit, one, travel, food, color, coconuts, a healthy diet, natural food, bio, natural, tasty, trade, stand, market, fit, edible, fresh, composition, the colors, the structure of the, rough, figure, hot, gray, the back, chest, sri lanka, summary, sri lanka, sri lanka, sri lanka, sri lanka, sri lanka" por pasja1000, Pixabay Content License, https://pixabay.com/photos/senior-work-bazaar-people-woman-3250869/
-- `images/hero-negocio.webp` — "bakery, breads, assorted, assortment, bread shop, food, pastries, shop, store, freshly baked, bakery, bakery, bakery, bakery, bakery, shop" por Pexels, Pixabay Content License, https://pixabay.com/photos/bakery-breads-assorted-assortment-1868925/
-- `images/camino-crecer.webp` — "apparel, boutique, bags, shoes, shop, store, shopping, retail, fashion, luxury, shelves, showcase, shop, shop, store, store, shopping, shopping, shopping, shopping, shopping, retail, fashion, fashion, fashion" por Pexels, Pixabay Content License, https://pixabay.com/photos/apparel-boutique-bags-shoes-shop-1850804/
-- `images/hero-manos.webp` — "clay, pottery, hands, potter, potter's wheel, dirty, artist, craft, work, art, handicraft, workshop, closeup, clay, pottery, pottery, potter, artist, work, work, work, work, work, art" por LubosHouska, Pixabay Content License, https://pixabay.com/photos/clay-pottery-hands-potter-1139098/
-- `images/camino-portal.webp` — "student, typing, keyboard, text, startup, people, students, office, strategy, work, technology, company, corporate, communication, young, plan, marketing, computer, design, professional, planning, internet, project, laptop, presentation, web, display, monitor, screen, digital, electronic, pc, modern, student, office, work, work, work, marketing, computer, computer, computer, computer, computer, laptop, laptop, laptop" por StartupStockPhotos, Pixabay Content License, https://pixabay.com/photos/student-typing-keyboard-text-849825/
-- `images/proyecto-*.webp` — capturas propias de Kindu (login), Toastmasters Pachuca y Planifica Tu Vivienda. Producto de Vertex Labs.
+## Fotografías (Pixabay Content License, sin atribución requerida; registro interno)
+- `images/hero-equipo*.webp` — equipo con laptop, por u_rffnzzbgba, https://pixabay.com/photos/10276367/
+- `images/camino-crecer*.webp` — boutique, por Pexels, https://pixabay.com/photos/1850804/
+- `images/camino-reinventarse*.webp` — código en pantalla, por Pexels, https://pixabay.com/photos/1839406/
+- `images/camino-portal*.webp` — escritorio con laptop, por StockSnap, https://pixabay.com/photos/925806/
+
+## Capturas propias (producto de Vertex Labs)
+- `images/proyecto-toastmasters*.webp` — toastmasters-pachuca.web.app
+- `images/proyecto-kindu*.webp` — Kindu (pantalla de entrada, build local)
+- `images/proyecto-planifica*.webp` — planificatuvivienda.com
+
+## Marca
+- `assets/brand/` — paquete de identidad oficial, propiedad de Vertex Labs.

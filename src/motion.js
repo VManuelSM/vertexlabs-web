@@ -99,16 +99,14 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     if (media) {
       gsap.fromTo(media, { clipPath: "inset(10% 10% 10% 10%)", autoAlpha: 0.4 }, {
         clipPath: "inset(0% 0% 0% 0%)", autoAlpha: 1, duration: 1, ease: "power3.out",
-        immediateRender: false,
-        clearProps: "opacity,visibility,transform",
-        scrollTrigger: { trigger: row, start: "top 72%", once: true },
+          clearProps: "opacity,visibility,transform",
+        scrollTrigger: { trigger: row, start: "top 94%", once: true },
       });
     }
     gsap.from(row.querySelector(".row-copy"), {
       y: 36, autoAlpha: 0, duration: 0.9, ease: "power2.out",
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: row, start: "top 72%", once: true },
+      scrollTrigger: { trigger: row, start: "top 94%", once: true },
     });
   });
 
@@ -125,9 +123,8 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   document.querySelectorAll(".section-title").forEach((el) => {
     gsap.from(el, {
       y: 40, autoAlpha: 0, duration: 0.9, ease: "power3.out",
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: el, start: "top 82%", once: true },
+      scrollTrigger: { trigger: el, start: "top 94%", once: true },
     });
   });
 
@@ -155,15 +152,13 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
     gsap.from(".radar-frame", {
       y: 60, autoAlpha: 0, duration: 0.9, ease: "power2.out",
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: "#radar", start: "top 65%", once: true },
+      scrollTrigger: { trigger: "#radar", start: "top 90%", once: true },
     });
     gsap.from(".radar-caption", {
       y: 30, autoAlpha: 0, duration: 0.8,
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: ".radar-stage", start: "top 60%", once: true },
+      scrollTrigger: { trigger: ".radar-stage", start: "top 92%", once: true },
     });
   }
 
@@ -171,9 +166,8 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   document.querySelectorAll(".timeline li").forEach((li, i) => {
     gsap.from(li, {
       y: 44, autoAlpha: 0, duration: 0.8, ease: "power2.out", delay: i * 0.1,
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: ".timeline", start: "top 78%", once: true },
+      scrollTrigger: { trigger: ".timeline", start: "top 94%", once: true },
     });
     const strokes = li.querySelectorAll("[pathLength]");
     gsap.set(strokes, { strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 });
@@ -187,15 +181,13 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   /* ---------- proyectos y cta ---------- */
   gsap.from(".project", {
     y: 44, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
-    immediateRender: false,
     clearProps: "opacity,visibility,transform",
-    scrollTrigger: { trigger: ".projects-grid", start: "top 76%", once: true },
+    scrollTrigger: { trigger: ".projects-grid", start: "top 94%", once: true },
   });
   gsap.from(".cta-line, .cta-note", {
     y: 30, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
-    immediateRender: false,
     clearProps: "opacity,visibility,transform",
-    scrollTrigger: { trigger: ".cta", start: "top 72%", once: true },
+    scrollTrigger: { trigger: ".cta", start: "top 92%", once: true },
   });
 
   /* ---------- footer: isotipo que se voltea y wordmark que sube ---------- */
@@ -203,9 +195,8 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   if (hourglass) {
     gsap.from(hourglass, {
       autoAlpha: 0, y: 20, duration: 0.8,
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: ".footer", start: "top 75%", once: true },
+      scrollTrigger: { trigger: ".footer", start: "top 88%", once: true },
     });
     /* el reloj de arena se voltea cada tanto, como quien espera */
     gsap.to(hourglass, {
@@ -214,18 +205,17 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
   }
 
-  gsap.fromTo(".footer-wordmark", { yPercent: 46 }, {
-    yPercent: 0, ease: "none",
-    scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true },
+  gsap.fromTo(".footer-wordmark", { yPercent: 16, autoAlpha: 0.2 }, {
+    yPercent: 0, autoAlpha: 1, ease: "none",
+    scrollTrigger: { trigger: ".footer-wordmark", start: "top bottom", end: "bottom 96%", scrub: true },
   });
 
   gsap.fromTo(".footer-ask, .footer-invite .btn, .footer-links",
     { y: 30, autoAlpha: 0 },
     {
       y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1,
-      immediateRender: false,
       clearProps: "opacity,visibility,transform",
-      scrollTrigger: { trigger: ".footer", start: "top 70%", once: true },
+      scrollTrigger: { trigger: ".footer", start: "top 88%", once: true },
     });
 
   return () => {

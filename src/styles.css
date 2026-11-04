@@ -55,7 +55,7 @@
   --body: 1.125rem;
   --small: 0.875rem;
 
-  --margin: clamp(20px, 3vw, 44px);
+  --margin: clamp(24px, 5.5vw, 84px);
   --gap-section: clamp(120px, 15vh, 210px);
 }
 
@@ -259,6 +259,7 @@ a { color: inherit; }
 .hero-photo {
   aspect-ratio: 21 / 9;
 }
+.hero-photo img { object-position: 50% 30%; }
 .scrollcue {
   display: inline-flex;
   align-items: center;
@@ -572,23 +573,19 @@ a { color: inherit; }
   color: var(--ink-soft);
 }
 .footer-wordmark {
-  width: 0;            /* no estira la retícula; el wordmark desborda y el footer lo recorta */
-  min-width: 100%;
-  transform: translateY(28%);
+  padding: 20px var(--margin) clamp(32px, 5vh, 56px);
   pointer-events: none;
   user-select: none;
 }
 .footer-wordmark img {
   display: block;
-  width: 104vw;
-  max-width: none;
+  width: 100%;
   height: auto;
-  opacity: .95;
 }
 @media (max-width: 720px) {
   .footer-top { grid-template-columns: 1fr; }
   .footer-invite { grid-column: 1; }
-  .footer-ask { font-size: clamp(1.9rem, 8.6vw, 3rem); }
+  .footer-ask { font-size: clamp(1.8rem, 8.1vw, 3rem); }
   .footer-links { grid-column: 1; margin-top: 40px; }
 }
 
