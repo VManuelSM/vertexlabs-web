@@ -110,8 +110,18 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
   });
 
+  /* cómo te ayudamos y planes: entradas en cascada */
+  [[".como-about, .status-item", ".como-grid"], [".plan", ".planes-grid"],
+   [".planes-note, .planes > .btn", ".planes-note"]].forEach(([sel, trigger]) => {
+    gsap.from(sel, {
+      y: 36, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.1,
+      clearProps: "opacity,visibility,transform",
+      scrollTrigger: { trigger, start: "top 94%", once: true },
+    });
+  });
+
   /* ---------- voz del narrador: reveal por palabra, scrubbed ---------- */
-  document.querySelectorAll(".bridge, .projects-sub").forEach((el) => {
+  document.querySelectorAll(".bridge, .projects-sub, .planes-sub").forEach((el) => {
     const split = SplitText.create(el, { type: "words", aria: "none" });
     gsap.fromTo(split.words, { opacity: 0.15 }, {
       opacity: 1, stagger: 0.06, ease: "none",
