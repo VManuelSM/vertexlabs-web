@@ -230,18 +230,23 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
   const unmountCursor = mountCursor();
 
-  /* capa 3D del hero, diferida: no toca el bundle inicial */
-  let heroProgress = 0;
-  let cleanup3d = null;
+  /* partículas de marca, diferidas: hero y footer comparten el sistema */
+  let heroProgress = 0, footerProgress = 0;
+  const cleanups3d = [];
   ScrollTrigger.create({
     trigger: ".hero", start: "top top", end: "bottom top", scrub: true,
     onUpdate: (self) => { heroProgress = self.progress; },
+  });
+  ScrollTrigger.create({
+    trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true,
+    onUpdate: (self) => { footerProgress = self.progress; },
   });
   if (innerWidth >= 1024) {
     const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 600));
     idle(() => {
       import("./hero3d.js").then((m) => {
-        cleanup3d = m.mountHero3D(document.querySelector(".hero"), () => heroProgress);
+        cleanups3d.push(m.mountParticles(document.querySelector(".hero"), () => heroProgress, { count: 1100 }));
+        cleanups3d.push(m.mountParticles(document.querySelector(".footer"), () => footerProgress, { count: 500, opacity: 0.45 }));
       });
     });
   }
@@ -267,7 +272,7 @@ mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
 
   return () => {
     unmountCursor();
-    cleanup3d?.();
+    cleanups3d.forEach((fn) => fn());
     magnets.forEach((fn) => fn());
   };
 });
