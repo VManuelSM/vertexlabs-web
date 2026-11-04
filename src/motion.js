@@ -52,78 +52,6 @@ function runPreloader(onDone) {
   gsap.delayedCall(2.5, finish);
 }
 
-/* ---------- radar vivo de la prueba: una vez dibujado, nunca reinicia ---------- */
-function buildProofRadar(svg) {
-  const cx = 150, cy = 150, R = 104;
-  const pt = (f, i) => {
-    const a = ((-90 + i * 60) * Math.PI) / 180;
-    return [cx + Math.cos(a) * R * f, cy + Math.sin(a) * R * f];
-  };
-  let s = "";
-  for (let g = 1; g <= 5; g++) {
-    let d = "";
-    for (let i = 0; i < 6; i++) {
-      const [x, y] = pt(g / 5, i);
-      d += (i ? " L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
-    }
-    s += `<path d="${d} Z" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="${g === 5 ? 1.6 : 1}" opacity="${(0.3 + g * 0.12).toFixed(2)}"/>`;
-  }
-  s += `<path id="proofPoly" d="" fill="#f55786" fill-opacity=".25" stroke="#f55786" stroke-width="4" stroke-linejoin="round"/>`;
-  s += `<path id="proofGem" d="M150 141 L158 150 L150 159 L142 150 Z" fill="#ffffff"/>`;
-  svg.innerHTML = s;
-  return pt;
-}
-
-function mountProofRadar() {
-  const svg = document.getElementById("proofRadar");
-  if (!svg) return;
-  const pt = buildProofRadar(svg);
-  const poly = svg.querySelector("#proofPoly");
-  const gem = svg.querySelector("#proofGem");
-  const vals = { a: 4, b: 3, c: 2, d: 3, e: 2, f: 3 };
-  const KEYS = ["a", "b", "c", "d", "e", "f"];
-  const render = () => {
-    let d = "";
-    KEYS.forEach((k, i) => {
-      const [x, y] = pt(vals[k] / 5, i);
-      d += (i ? " L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
-    });
-    poly.setAttribute("d", d + " Z");
-  };
-  render();
-
-  svg.querySelectorAll("path").forEach((p) => {
-    const len = p.getTotalLength();
-    p.style.strokeDasharray = len;
-    p.style.strokeDashoffset = len;
-  });
-  ScrollTrigger.create({
-    trigger: ".proof", start: "top 70%", once: true,
-    onEnter: () => {
-      svg.querySelectorAll("path").forEach((p, i) => {
-        gsap.fromTo(p, { opacity: 0 }, { opacity: 1, duration: 0.4, delay: i * 0.07 });
-        gsap.to(p, {
-          strokeDashoffset: 0, duration: 1.1, delay: i * 0.07, ease: "power2.inOut",
-          onComplete: () => { p.style.strokeDasharray = p.style.strokeDashoffset = ""; },
-        });
-      });
-      /* y de ahí en adelante los valores cambian solos, para siempre */
-      const shuffle = () => {
-        const target = {};
-        KEYS.forEach((k) => { target[k] = gsap.utils.random(1.4, 5, 0.1); });
-        gsap.to(vals, {
-          ...target, duration: 1.9, ease: "sine.inOut", onUpdate: render,
-          onComplete: () => gsap.delayedCall(0.7, shuffle),
-        });
-        gsap.to(gem, {
-          rotation: "+=90", transformOrigin: "50% 50%", duration: 1.9, ease: "sine.inOut",
-        });
-      };
-      gsap.delayedCall(1.5, shuffle);
-    },
-  });
-}
-
 const mm = gsap.matchMedia();
 
 mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -158,7 +86,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   runPreloader(() => heroIntro.play());
 
   /* ---------- fotos: parallax interno sutil al hacer scroll ---------- */
-  document.querySelectorAll(".photo img").forEach((img) => {
+  document.querySelectorAll(".photo:not(.shot) img").forEach((img) => {
     gsap.fromTo(img, { yPercent: -5, scale: 1.12 }, {
       yPercent: 5, scale: 1.12, ease: "none",
       scrollTrigger: { trigger: img.closest(".photo"), start: "top bottom", end: "bottom top", scrub: true },
@@ -185,7 +113,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   });
 
   /* ---------- voz del narrador: reveal por palabra, scrubbed ---------- */
-  document.querySelectorAll(".bridge, .proof-head").forEach((el) => {
+  document.querySelectorAll(".bridge, .projects-sub").forEach((el) => {
     const split = SplitText.create(el, { type: "words", aria: "none" });
     gsap.fromTo(split.words, { opacity: 0.15 }, {
       opacity: 1, stagger: 0.06, ease: "none",
@@ -256,13 +184,12 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
       .to(strokes, { drawSVG: "0% 100%", duration: 0.9, stagger: 0.1, ease: "power1.inOut" }, i * 0.12 + 0.05);
   });
 
-  /* ---------- prueba y cta ---------- */
-  mountProofRadar();
-  gsap.from(".proof-sentence, .proof-media", {
-    y: 34, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
+  /* ---------- proyectos y cta ---------- */
+  gsap.from(".project", {
+    y: 44, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
     immediateRender: false,
     clearProps: "opacity,visibility,transform",
-    scrollTrigger: { trigger: ".proof", start: "top 68%", once: true },
+    scrollTrigger: { trigger: ".projects-grid", start: "top 76%", once: true },
   });
   gsap.from(".cta-line, .cta-note", {
     y: 30, autoAlpha: 0, duration: 0.8, ease: "power2.out", stagger: 0.12,
@@ -355,18 +282,7 @@ mm.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", () => {
   };
 });
 
-/* reduced-motion: sin preloader y el radar de la prueba dibujado y quieto */
+/* reduced-motion: sin preloader */
 mm.add("(prefers-reduced-motion: reduce)", () => {
   document.getElementById("preloader")?.remove();
-  const svg = document.getElementById("proofRadar");
-  if (svg && !svg.innerHTML.trim()) {
-    const pt = buildProofRadar(svg);
-    const poly = svg.querySelector("#proofPoly");
-    let d = "";
-    [4, 3, 2, 3, 2, 3].forEach((v, i) => {
-      const [x, y] = pt(v / 5, i);
-      d += (i ? " L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
-    });
-    poly.setAttribute("d", d + " Z");
-  }
 });

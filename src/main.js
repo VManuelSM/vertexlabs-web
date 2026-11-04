@@ -82,19 +82,6 @@ if (svg && form) {
   });
 }
 
-/* ---------- prueba: nombre iluminado que recorre la lista ---------- */
-const names = [...document.querySelectorAll(".proof-name")];
-if (names.length && !reduced) {
-  let lit = 0;
-  names[0].classList.add("lit");
-  setInterval(() => {
-    names[lit].classList.remove("lit");
-    lit = (lit + 1) % names.length;
-    names[lit].classList.add("lit");
-  }, 2000);
-} else {
-  names.forEach((n) => n.classList.add("lit"));
-}
 
 /* ---------- cta: correo con asunto y cuerpo escritos ---------- */
 const ctaForm = document.getElementById("ctaForm");
