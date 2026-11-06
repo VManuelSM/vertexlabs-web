@@ -45,7 +45,7 @@ function runPreloader(onDone) {
 
   document.fonts.ready.then(() => bump(55));
   const heroImg = new Image();
-  heroImg.src = `${import.meta.env.BASE_URL}images/hero-negocio-1000.webp`;
+  heroImg.src = `${import.meta.env.BASE_URL}images/hero-equipo-1000.webp`;
   const imgReady = heroImg.decode().catch(() => {});
   imgReady.then(() => bump(90));
   Promise.all([document.fonts.ready, imgReady]).then(finish);
