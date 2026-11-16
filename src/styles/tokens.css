@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Vertex Labs · tokens v1  →  src/styles/tokens.css
+   Fuente: Manual de identidad visual 2026 (colores y tipografías).
+   Lo marcado como "derivado" no está en el manual: validar con quien cuida la marca.
+   Regla: ningún componente usa valores escritos a mano; solo estas variables.
+   ========================================================================== */
+
+:root {
+  /* ---------- Marca: los 6 colores del manual ---------- */
+  --brand-navy:  #203441;
+  --brand-plum:  #6E2451;
+  --brand-pink:  #F55786;
+  --brand-steel: #809DAC;
+  --brand-sand:  #E0CFBF;
+  --brand-white: #FFFFFF;
+
+  /* ---------- Derivados (no están en el manual) ---------- */
+  --surface-soft: #F6F1EC;  /* arena al 30 % sobre blanco; azul marino encima = 11.5:1 */
+  --text-muted:   #586770;  /* azul marino al 75 % sobre blanco; 5.9:1 sobre blanco */
+
+  /* ---------- Semánticos: lo que usan los componentes ---------- */
+  --color-text:            var(--brand-navy);   /* 12.9:1 sobre blanco, 8.5:1 sobre arena */
+  --color-text-muted:      var(--text-muted);   /* solo sobre blanco o --surface-soft */
+  --color-text-inverse:    var(--brand-white);  /* sobre azul marino o ciruela */
+  --color-text-inverse-muted: var(--brand-sand);/* 8.5:1 sobre azul marino */
+  --color-bg:              var(--brand-white);
+  --color-surface:         var(--surface-soft);
+  --color-surface-brand:   var(--brand-sand);
+  --color-surface-inverse: var(--brand-navy);
+  --color-action:          var(--brand-pink);   /* texto blanco encima solo ≥ 19 px en negrita (3.2:1) */
+  --color-action-hover:    var(--brand-plum);   /* blanco encima = 10.3:1 */
+  --color-action-text:     var(--brand-white);
+  --color-accent:          var(--brand-plum);   /* etiquetas y acentos sobre fondo claro */
+  --color-accent-on-dark:  var(--brand-pink);   /* solo texto grande sobre azul marino (4.05:1) */
+  --color-decor:           var(--brand-steel);  /* líneas, íconos decorativos, rejilla del radar. Nunca texto. */
+  --color-border:          rgba(32, 52, 65, 0.16);
+  --color-border-strong:   var(--brand-navy);
+  --color-focus:           var(--brand-navy);
+  --color-focus-inverse:   var(--brand-sand);
+  --color-error:           var(--brand-plum);   /* siempre con ícono y texto, nunca solo color */
+  --color-whatsapp:        var(--brand-navy);   /* el botón de WhatsApp usa la marca, no el verde */
+
+  /* Degradado de marca (aproximación del manual: acero → marino → ciruela → rosa → arena).
+     Solo en: banda de cierre, fondo de capturas, imagen para compartir, encabezado del portal.
+     Texto encima: solo blanco y solo sobre la zona azul marino o ciruela. */
+  --gradient-brand:
+    radial-gradient(55% 75% at 0% 0%, rgba(128, 157, 172, 0.95) 0%, rgba(128, 157, 172, 0) 70%),
+    radial-gradient(60% 90% at 8% 100%, rgba(32, 52, 65, 1) 0%, rgba(32, 52, 65, 0) 75%),
+    radial-gradient(55% 80% at 42% 70%, rgba(110, 36, 81, 1) 0%, rgba(110, 36, 81, 0) 75%),
+    radial-gradient(45% 70% at 70% 25%, rgba(245, 87, 134, 1) 0%, rgba(245, 87, 134, 0) 75%),
+    linear-gradient(100deg, #203441 0%, #6E2451 45%, #F55786 72%, #E0CFBF 100%);
+
+  /* ---------- Tipografía ---------- */
+  --font-brand: "Good Timing", "Averta", system-ui, sans-serif;  /* logo y título del hero */
+  --font-text:  "Averta", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --text-h1:   clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);    /* 40 → 72 px */
+  --text-h2:   clamp(2rem, 1.7rem + 1.2vw, 2.75rem);     /* 32 → 44 px */
+  --text-h3:   clamp(1.375rem, 1.3rem + 0.3vw, 1.625rem); /* 22 → 26 px */
+  --text-lg:   1.25rem;    /* 20 px: subtítulos */
+  --text-base: 1.125rem;   /* 18 px: texto */
+  --text-btn:  1.1875rem;  /* 19 px: mínimo para texto blanco sobre rosa */
+  --text-sm:   0.9375rem;  /* 15 px: notas */
+  --text-xs:   0.8125rem;  /* 13 px: solo etiquetas en mayúsculas */
+
+  --leading-tight: 1.08;
+  --leading-snug: 1.25;
+  --leading-body: 1.6;
+  --tracking-eyebrow: 0.08em;
+  --eyebrow-mark: " __";   /* remate del manual */
+
+  /* ---------- Espacio (escala de 4) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --section-gap: var(--space-8);   /* 64 px en celular; 96 px desde 900 px */
+  --gutter: var(--space-4);        /* 16 px en celular */
+  --container: 1200px;
+
+  /* ---------- Forma y profundidad ---------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(32, 52, 65, 0.08);
+  --shadow-md: 0 10px 30px rgba(32, 52, 65, 0.14);
+  --focus-ring: 0 0 0 3px var(--brand-white), 0 0 0 5px var(--color-focus);
+
+  /* ---------- Movimiento ---------- */
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ---------- Interacción y capas ---------- */
+  --tap-min: 44px;
+  --z-header: 50;
+  --z-float: 60;
+
+  /* ---------- Cortes (referencia; en CSS se escriben en los @media) ---------- */
+  --bp-sm: 560px;
+  --bp-md: 900px;
+  --bp-lg: 1200px;
+}
+
+@media (min-width: 560px) {
+  :root { --gutter: var(--space-5); }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --section-gap: var(--space-9);
+    --gutter: var(--space-6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+  }
+}

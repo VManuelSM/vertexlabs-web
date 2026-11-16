@@ -1,0 +1,362 @@
+<div appWrap>
+  <header class="grid gap-4 pt-16 pb-8">
+    <p appEyebrow>Sistema de diseño</p>
+    <h1 appH2>Componentes de Vertex Labs v1</h1>
+    <p appLead>
+      Átomos, moléculas y organismos del sitio con sus estados. Colores y fuentes del manual de
+      identidad; lo derivado está marcado. Los mismos valores están en tokens.css.
+    </p>
+    <p class="mt-4"><a appLinkArrow icon="back" routerLink="/">Volver al sitio</a></p>
+  </header>
+
+  <!-- Color -->
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-color">
+    <h2 appH3 id="sg-color">Color</h2>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+      @for (swatch of swatches; track swatch.name) {
+        <div class="overflow-hidden rounded-md border border-border bg-white">
+          <span class="block h-20" [class]="swatch.className"></span>
+          <p class="p-3 text-sm leading-snug">
+            <b class="block">{{ swatch.name }}</b>
+            {{ swatch.value }} · {{ swatch.origin }}<br />{{ swatch.use }}
+          </p>
+        </div>
+      }
+      <div class="overflow-hidden rounded-md border border-border bg-white">
+        <span class="block h-20 bg-(image:--gradient-brand)"></span>
+        <p class="p-3 text-sm leading-snug">
+          <b class="block">Degradado de marca</b>
+          Manual<br />Cierre, capturas, portal
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Combinaciones de texto -->
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-contraste">
+    <h2 appH3 id="sg-contraste">Combinaciones de texto</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-xl border-collapse text-sm">
+        <thead>
+          <tr class="text-xs tracking-eyebrow text-muted-foreground uppercase">
+            <th class="border-b border-border px-3 py-3 text-start">Muestra</th>
+            <th class="border-b border-border px-3 py-3 text-start">Contraste</th>
+            <th class="border-b border-border px-3 py-3 text-start">Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pair of pairs; track pair.label) {
+            <tr>
+              <td class="border-b border-border px-3 py-3">
+                <span
+                  class="inline-block rounded-sm px-3 py-1 font-bold"
+                  [class]="pair.className"
+                  >{{ pair.label }}</span
+                >
+              </td>
+              <td class="border-b border-border px-3 py-3 tabular-nums">{{ pair.ratio }}</td>
+              <td class="border-b border-border px-3 py-3">{{ pair.use }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tipografía -->
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-tipo">
+    <h2 appH3 id="sg-tipo">Tipografía</h2>
+    <div class="grid gap-3">
+      <p appDemoLabel>Título del hero · Good Timing (solo aquí y en el logo)</p>
+      <p appH1>Listo para vender.</p>
+      <p appDemoLabel>Título de sección · Averta Bold</p>
+      <p appH2>Precios claros, sin letras chiquitas.</p>
+      <p appDemoLabel>Subtítulo · Averta Bold</p>
+      <p appH3>Para crecer</p>
+      <p appDemoLabel>Etiqueta con remate del manual</p>
+      <p appEyebrow>Planes y precios</p>
+      <p appDemoLabel>Texto · Averta Regular 18 px</p>
+      <p>Hacemos tu sitio web, tu tienda en línea o el sistema que te falta.</p>
+      <p appDemoLabel>Nota · 15 px</p>
+      <p appNote>Precios en pesos mexicanos, más IVA.</p>
+    </div>
+  </section>
+
+  <!-- Átomos -->
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-atomos">
+    <h2 appH3 id="sg-atomos">Átomos</h2>
+
+    <p appDemoLabel>Botón principal: normal, hover, foco, presionado, deshabilitado, cargando</p>
+    <div class="flex flex-wrap items-center gap-4">
+      <button hlmBtn type="button">Haz tu diagnóstico gratis</button>
+      <button hlmBtn type="button" data-demo="hover">Hover</button>
+      <button hlmBtn type="button" data-demo="focus">Foco</button>
+      <button hlmBtn type="button" data-demo="active">Presionado</button>
+      <button hlmBtn type="button" disabled>Deshabilitado</button>
+      <button hlmBtn type="button" loading>Cargando</button>
+    </div>
+
+    <p appDemoLabel>Botón compacto, secundario, WhatsApp y texto</p>
+    <div class="flex flex-wrap items-center gap-4">
+      <button hlmBtn variant="dark" type="button">Diagnóstico gratis</button>
+      <button hlmBtn variant="dark" type="button" data-demo="hover">Hover</button>
+      <button hlmBtn variant="outline" type="button">Quiero este plan</button>
+      <button hlmBtn variant="outline" type="button" data-demo="hover">Hover</button>
+      <button hlmBtn variant="outline" type="button">
+        <app-icon name="chat" />Escríbenos por WhatsApp
+      </button>
+      <button hlmBtn variant="text" size="icon" type="button" aria-label="Escríbenos por WhatsApp">
+        <app-icon name="chat" />
+      </button>
+      <button hlmBtn variant="text" size="inline" type="button">
+        <app-icon name="back" />Anterior
+      </button>
+      <button hlmBtn variant="text" size="inline" type="button" disabled>
+        <app-icon name="back" />Anterior
+      </button>
+    </div>
+
+    <p appDemoLabel>Botones sobre fondo oscuro</p>
+    <div class="flex flex-wrap items-center gap-4 rounded-md bg-navy p-6" data-surface="dark">
+      <button hlmBtn type="button">Haz tu diagnóstico gratis</button>
+      <button hlmBtn variant="light" type="button">
+        <app-icon name="chat" />Escríbenos por WhatsApp
+      </button>
+      <button hlmBtn variant="light" type="button" data-demo="hover">Hover</button>
+    </div>
+
+    <p appDemoLabel>Enlace, insignia y dato por confirmar</p>
+    <div class="flex flex-wrap items-center gap-6">
+      <a appLinkArrow appSection="planes">Ver planes y precios</a>
+      <a appLinkArrow appSection="planes" data-demo="hover">Hover</a>
+      <span hlmBadge>Recomendado si ya vendes</span>
+      <app-tbd>unas 2 semanas</app-tbd>
+    </div>
+
+    <p appDemoLabel>Íconos (decorativos, siempre con texto al lado)</p>
+    <ul class="flex flex-wrap gap-4">
+      @for (name of icons; track name) {
+        <li class="grid w-20 justify-items-center gap-2 text-xs text-muted-foreground">
+          <app-icon class="text-navy" [name]="name" />{{ name }}
+        </li>
+      }
+    </ul>
+
+    <p appDemoLabel>Logo: horizontal sobre claro, sobre oscuro y solo isotipo</p>
+    <div class="flex flex-wrap items-center gap-6">
+      <div class="rounded-md border border-border bg-white p-6 text-navy">
+        <app-logo class="h-10" />
+      </div>
+      <div class="rounded-md bg-navy p-6 text-white"><app-logo class="h-10" /></div>
+      <div class="rounded-md border border-border bg-white p-6 text-navy">
+        <app-logo class="h-10" variant="isotype" />
+      </div>
+    </div>
+
+    <p appDemoLabel>Campos: normal, foco, error, deshabilitado y selector</p>
+    <div class="grid gap-6 md:grid-cols-2">
+      <app-form-field label="Nombre" for="sg-a">
+        <input hlmInput id="sg-a" placeholder="Ana López" />
+      </app-form-field>
+      <app-form-field label="Tu negocio" for="sg-b">
+        <input hlmInput id="sg-b" value="Florería Ana" data-demo="focus" />
+      </app-form-field>
+      <app-form-field
+        label="WhatsApp o correo"
+        for="sg-c"
+        error="Déjanos un WhatsApp de 10 dígitos o un correo válido."
+        forceInvalid
+        showError
+      >
+        <input hlmInput id="sg-c" value="77112" forceInvalid />
+      </app-form-field>
+      <app-form-field label="Correo" for="sg-d" optional>
+        <input hlmInput id="sg-d" value="No disponible" disabled />
+      </app-form-field>
+      <app-form-field label="¿Qué necesitas?" for="sg-e">
+        <hlm-native-select selectId="sg-e">
+          <option value="">Elige una opción</option>
+          <option>Sitio web</option>
+          <option>Tienda en línea</option>
+          <option>Sistema a la medida</option>
+          <option>Todavía no sé</option>
+        </hlm-native-select>
+      </app-form-field>
+    </div>
+
+    <p appDemoLabel>Casilla: marcada, sin marcar y con error</p>
+    <div class="grid gap-4">
+      <app-check-field for="sg-f">
+        <hlm-checkbox inputId="sg-f" checked />
+        Acepto el aviso de privacidad.
+      </app-check-field>
+      <app-check-field for="sg-g">
+        <hlm-checkbox inputId="sg-g" />
+        Acepto el aviso de privacidad.
+      </app-check-field>
+      <app-check-field
+        for="sg-h"
+        error="Necesitamos tu aceptación para contactarte."
+        forceInvalid
+        showError
+      >
+        <hlm-checkbox inputId="sg-h" forceInvalid />
+        Acepto el aviso de privacidad.
+      </app-check-field>
+    </div>
+
+    <p appDemoLabel>Opción de respuesta: normal, hover y elegida</p>
+    <div class="grid max-w-lead gap-3">
+      <button appAnswerOption>{{ sampleAxis.options[0] }}</button>
+      <button appAnswerOption data-demo="hover">{{ sampleAxis.options[1] }}</button>
+      <button appAnswerOption pressed>{{ sampleAxis.options[2] }}</button>
+    </div>
+
+    <p appDemoLabel>Imagen: captura real con texto alternativo</p>
+    <app-phone-frame
+      class="w-48"
+      src="/images/planifica-tu-vivienda.jpg"
+      alt="Sitio de Planifica Tu Vivienda en un celular, con el título «Construye tu casa paso a paso y sin complicaciones»."
+    />
+  </section>
+
+  <!-- Moléculas -->
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-moleculas">
+    <h2 appH3 id="sg-moleculas">Moléculas</h2>
+
+    <p appDemoLabel>Precio (sale de content/plans.ts)</p>
+    <div class="grid gap-6 md:grid-cols-3">
+      @for (plan of plans; track plan.id) {
+        <div
+          class="rounded-md border p-8"
+          [class]="
+            plan.tone === 'dark'
+              ? 'border-navy bg-navy text-white'
+              : plan.tone === 'sand'
+                ? 'border-sand bg-sand'
+                : 'border-border bg-white'
+          "
+          [attr.data-surface]="plan.tone === 'light' ? null : plan.tone"
+        >
+          <app-price [plan]="plan" />
+        </div>
+      }
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      <div class="grid content-start gap-3 rounded-md border border-border p-8">
+        <p appDemoLabel>Paso del proceso</p>
+        <ol>
+          <li
+            appProcessStep
+            [number]="3"
+            heading="Construcción"
+            text="Avanzamos por etapas y ves cada avance en tu portal de cliente."
+          ></li>
+        </ol>
+      </div>
+      <div class="grid content-start gap-3 rounded-md border border-border p-8">
+        <p appDemoLabel>Testimonio</p>
+        <blockquote appTestimonial [quote]="pendingQuote" [author]="pendingAuthor"></blockquote>
+      </div>
+      <div class="grid content-start gap-3 rounded-md border border-border p-8">
+        <p appDemoLabel>Elemento de lista</p>
+        <ul class="grid gap-3">
+          <li appCheckItem>Diseño pensado para celular</li>
+          <li appCheckItem>Revisión de tu diagnóstico con nosotros</li>
+        </ul>
+      </div>
+      <div class="grid content-start gap-3 rounded-md border border-border p-8">
+        <p appDemoLabel>Pregunta frecuente: abierta y cerrada</p>
+        <div brnAccordion type="multiple" class="border-t border-border">
+          <app-faq-item
+            question="¿Facturan?"
+            answer="Sí. Los precios son más IVA y te damos factura."
+            isOpened
+          />
+          <app-faq-item
+            question="¿Trabajan fuera de Pachuca?"
+            answer="Sí. Trabajamos con negocios de todo México por videollamada, y el avance lo ves en tu portal."
+          />
+        </div>
+      </div>
+    </div>
+
+    <p appDemoLabel>Tarjeta de problema</p>
+    <div class="grid gap-6 md:grid-cols-3">
+      <article
+        appProblemCard
+        icon="search"
+        heading="No te encuentran"
+        text="Alguien busca lo que vendes y aparece tu competencia, o aparecen tus datos de hace años."
+      ></article>
+    </div>
+
+    <p appDemoLabel>Ficha de caso: con captura y pendiente de captura</p>
+    <div class="grid gap-6 md:grid-cols-3">
+      <article appCaseCard [case]="cases[0]"></article>
+      <article appCaseCard [case]="cases[2]"></article>
+    </div>
+
+    <p appDemoLabel>Tarjeta de plan: clara, oscura y arena (sale de content/plans.ts)</p>
+    <div class="grid gap-6 md:grid-cols-3">
+      @for (plan of plans; track plan.id) {
+        <article appPlanCard [plan]="plan"></article>
+      }
+    </div>
+
+    <p appDemoLabel>Radar: sin respuestas, a medias y completo</p>
+    <div class="grid gap-6 sm:grid-cols-3">
+      @for (values of radarDemos; track $index) {
+        <app-radar-chart class="rounded-md border border-border p-4" [values]="values" />
+      }
+    </div>
+
+    <p appDemoLabel>Formulario: enviado y error al enviar</p>
+    <div class="grid gap-6 md:grid-cols-2">
+      <app-lead-success name="Ana" />
+      <app-lead-failure [message]="generalMessage" location="componentes" />
+    </div>
+  </section>
+
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-organismos">
+    <h2 appH3 id="sg-organismos">Organismos</h2>
+    <p>Cada organismo es una sección del sitio. Ábrelos en contexto:</p>
+    <div class="flex flex-wrap gap-x-6 gap-y-3">
+      @for (organism of organisms; track organism.fragment) {
+        <a appLinkArrow routerLink="/" [fragment]="organism.fragment">{{ organism.label }}</a>
+      }
+    </div>
+  </section>
+
+  <section class="grid gap-4 border-t border-border pt-8 pb-16" aria-labelledby="sg-pruebas">
+    <h2 appH3 id="sg-pruebas">Pruebas del diagnóstico</h2>
+    <p class="font-bold" [class.text-plum]="passed() < tests.length">
+      {{ passed() }} de {{ tests.length }} casos pasan.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-start text-sm">
+        <thead>
+          <tr class="border-b-2 border-navy text-start">
+            <th scope="col" class="py-2 pe-4 text-start">V · C · F · N · D · P</th>
+            <th scope="col" class="py-2 pe-4 text-start">Plan esperado</th>
+            <th scope="col" class="py-2 pe-4 text-start">Foco esperado</th>
+            <th scope="col" class="py-2 text-start">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (test of tests; track $index) {
+            <tr class="border-b border-border">
+              <td class="py-2 pe-4 whitespace-nowrap">{{ test.answers }}</td>
+              <td class="py-2 pe-4">{{ test.plan }}</td>
+              <td class="py-2 pe-4">{{ test.focus }}</td>
+              <td class="py-2 font-bold" [class.text-plum]="!test.ok">
+                {{ test.ok ? 'Pasa' : 'Falla: ' + test.got }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
