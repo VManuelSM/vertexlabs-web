@@ -19,7 +19,10 @@ export interface SiteConfig {
    * Sin él, el formulario muestra el estado de error en lugar de fingir que envió.
    */
   readonly leadEndpoint: string | null;
-  /** TODO(dato): imagen para compartir de 1200 × 630 en `public/` ("/og-1200x630.jpg"). */
+  /**
+   * Imagen para compartir de 1200 × 630 en `public/`, generada con `pnpm share-image`. Solo se
+   * anuncia en el <head> cuando existe `siteUrl` (Open Graph pide una URL absoluta).
+   */
   readonly shareImage: string | null;
 }
 
@@ -30,7 +33,7 @@ export const SITE: SiteConfig = {
   siteUrl: null,
   legalName: null,
   leadEndpoint: null,
-  shareImage: null,
+  shareImage: '/og-1200x630.jpg',
 };
 
 export const SITE_CONFIG = new InjectionToken<SiteConfig>('SITE_CONFIG', {

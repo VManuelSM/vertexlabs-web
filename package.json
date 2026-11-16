@@ -16,7 +16,8 @@
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
     "test": "ng test --watch=false",
     "format": "prettier --write \"src/**/*.{ts,html,css}\"",
-    "check:design": "node scripts/check-design.mjs"
+    "check:design": "node scripts/check-design.mjs",
+    "share-image": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/share-image.mjs"
   },
   "dependencies": {
     "@angular/cdk": "~21.2.14",

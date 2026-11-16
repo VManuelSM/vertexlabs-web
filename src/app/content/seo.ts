@@ -1,5 +1,6 @@
 import type { SiteConfig } from '@app/core/site-config';
 import { startingPrice } from './plans';
+import { SHARE } from './share';
 
 /*
  * Textos del <head>, tal cual del prototipo v1. El precio sale de content/plans.ts.
@@ -12,8 +13,8 @@ const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1
 export const HOME_HEAD = {
   title: 'Tu negocio, listo para vender en internet · Vertex Labs',
   description: `Hacemos sitios, tiendas en línea y sistemas para PyMEs de todo México. Diagnóstico gratis y precios claros ${lowerFirst(startingPrice())}.`,
-  ogTitle: 'Tu negocio, listo para vender en internet',
-  ogDescription: 'Diagnóstico gratis en 3 minutos. Precios claros y un equipo real, desde Pachuca.',
+  ogTitle: SHARE.title,
+  ogDescription: SHARE.description,
 } as const;
 
 /** JSON-LD del prototipo (ProfessionalService es un tipo de LocalBusiness). Sin datos inventados. */

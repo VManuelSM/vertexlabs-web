@@ -19,7 +19,7 @@ const JSON_LD_ID = 'datos-estructurados';
 
 /**
  * `<head>` de cada página: título, descripción, URL canónica, Open Graph, Twitter y JSON-LD. Lo que
- * depende del dominio o de la imagen para compartir solo se escribe cuando existen (TODO(dato)).
+ * depende del dominio (TODO(dato)) solo se escribe cuando existe, incluida la imagen para compartir.
  * Sale en el HTML prerenderizado.
  */
 @Injectable({ providedIn: 'root' })
