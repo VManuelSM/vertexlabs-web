@@ -19,14 +19,19 @@ import { CaseCard } from '@app/components/molecules/case-card';
 import { CheckItem } from '@app/components/molecules/check-item';
 import { FaqItem } from '@app/components/molecules/faq-item';
 import { CheckField, FormField } from '@app/components/molecules/form-field';
+import { LeadFailure, LeadSuccess } from '@app/components/molecules/lead-feedback';
+import { PlanCard } from '@app/components/molecules/plan-card';
 import { Price } from '@app/components/molecules/price';
 import { ProblemCard } from '@app/components/molecules/problem-card';
 import { ProcessStep } from '@app/components/molecules/process-step';
+import { RadarChart } from '@app/components/molecules/radar-chart';
 import { Testimonial } from '@app/components/molecules/testimonial';
 import { CASES } from '@app/content/cases';
 import { tbd } from '@app/content/copy';
 import { planById, PLANS } from '@app/content/plans';
-import { AXES } from '@app/diagnostic/axes';
+import { AXES, FOCUS } from '@app/diagnostic/axes';
+import { RECOMMEND_CASES, recommend, toScores } from '@app/diagnostic/recommend';
+import { WHATSAPP_MESSAGES } from '@app/core/whatsapp';
 
 interface Swatch {
   readonly name: string;
@@ -71,12 +76,16 @@ export class DemoLabel {}
     HlmInput,
     HlmNativeSelect,
     Icon,
+    LeadFailure,
+    LeadSuccess,
     LinkArrow,
     Logo,
     PhoneFrame,
+    PlanCard,
     Price,
     ProblemCard,
     ProcessStep,
+    RadarChart,
     RouterLink,
     TbdMark,
     Testimonial,
@@ -196,6 +205,25 @@ export class ComponentsPage {
   protected readonly firstPlan = planById('empezar');
   protected readonly sampleAxis = AXES[0];
   protected readonly cases = CASES;
+  protected readonly generalMessage = WHATSAPP_MESSAGES.general;
+  protected readonly radarDemos = [
+    [null, null, null, null, null, null],
+    [3, 2, 4, null, null, null],
+    [2, 3, 1, 4, 3, 2],
+  ] as const;
+
+  /** Los 7 casos de la especificación, corridos con la misma `recommend()` del sitio. */
+  protected readonly tests = RECOMMEND_CASES.map((c) => {
+    const r = recommend(toScores(c.answers));
+    return {
+      answers: c.answers.join(' · '),
+      plan: planById(c.plan).name,
+      focus: FOCUS[c.focus].name,
+      ok: r.plan === c.plan && r.focus === c.focus,
+      got: `${planById(r.plan).name} / ${FOCUS[r.focus].name}`,
+    };
+  });
+  protected readonly passed = () => this.tests.filter((t) => t.ok).length;
   protected readonly organisms = [
     { fragment: 'inicio', label: 'Hero' },
     { fragment: 'problemas', label: 'Problemas' },

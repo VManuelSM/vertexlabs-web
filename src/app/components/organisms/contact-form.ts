@@ -1,14 +1,4 @@
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  Component,
-  DOCUMENT,
-  ElementRef,
-  inject,
-  Injector,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   type AbstractControl,
   NonNullableFormBuilder,
@@ -23,13 +13,13 @@ import { HlmInput } from '@ui/input';
 import { HlmNativeSelect } from '@ui/native-select';
 import { tbd } from '@app/content/copy';
 import { NEEDS } from '@app/content/home';
-import { Analytics } from '@app/core/analytics';
-import { isEmail, isWhatsapp, LeadError, Leads, UTM_KEYS, type Utm } from '@app/core/leads';
-import { WHATSAPP_MESSAGES, WhatsappLink } from '@app/core/whatsapp';
+import { injectLeadForm } from '@app/core/lead-form';
+import { isEmail, isWhatsapp, UTM_KEYS } from '@app/core/leads';
+import { WHATSAPP_MESSAGES } from '@app/core/whatsapp';
 import { CopyText } from '../atoms/copy';
-import { LinkArrow } from '../atoms/link-arrow';
 import { TextImports } from '../atoms/text';
 import { CheckField, FormField } from '../molecules/form-field';
+import { LeadFailure, LeadSuccess } from '../molecules/lead-feedback';
 
 const contactValidator = (control: AbstractControl<string>): ValidationErrors | null => {
   const value = control.value?.trim() ?? '';
@@ -56,11 +46,11 @@ const FIELD_IDS = {
     HlmCheckbox,
     HlmInput,
     HlmNativeSelect,
-    LinkArrow,
+    LeadFailure,
+    LeadSuccess,
     ReactiveFormsModule,
     RouterLink,
     TextImports,
-    WhatsappLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -68,11 +58,8 @@ const FIELD_IDS = {
     'data-surface': 'light',
   },
   template: `
-    @if (state() === 'sent') {
-      <div class="grid gap-2 rounded-md border border-border bg-surface p-6">
-        <b #success tabindex="-1" class="text-lg">Listo, {{ firstName() }}.</b>
-        <span><app-copy [value]="successNote" /></span>
-      </div>
+    @if (lead.state() === 'sent') {
+      <app-lead-success [name]="lead.firstName()" autofocus />
     } @else {
       <form class="grid gap-4" [formGroup]="form" (ngSubmit)="submit()" novalidate>
         <h3 appH3>¿Prefieres que te contactemos?</h3>
@@ -114,60 +101,34 @@ const FIELD_IDS = {
           >.
         </app-check-field>
         @for (key of utmKeys; track key) {
-          <input type="hidden" [name]="key" [value]="utm()[key] ?? ''" />
+          <input type="hidden" [name]="key" [value]="lead.utm()[key] ?? ''" />
         }
         <button
           hlmBtn
           variant="dark"
           class="w-full"
           type="submit"
-          [loading]="state() === 'sending'"
+          [loading]="lead.state() === 'sending'"
         >
           Enviar
         </button>
         <p appNote><app-copy [value]="responseNote" /></p>
-        <p class="font-semibold" role="status" aria-live="polite">{{ status() }}</p>
-        @if (state() === 'error') {
-          <!-- TODO(dato): texto cuando falla el envío (no está en el prototipo). -->
-          <div class="grid gap-3 rounded-md border-2 border-destructive p-4" role="alert">
-            <p class="flex items-center gap-2 font-semibold text-destructive">
-              <span
-                aria-hidden="true"
-                class="inline-grid size-5 shrink-0 place-items-center rounded-pill bg-destructive text-xs font-bold text-white"
-                >!</span
-              >
-              <app-copy [value]="errorNote" />
-            </p>
-            <a
-              appLinkArrow
-              class="justify-self-start"
-              [appWhatsapp]="messages.general"
-              location="cierre-error"
-              >Escríbenos por WhatsApp</a
-            >
-          </div>
+        <p class="font-semibold" role="status" aria-live="polite">{{ lead.status() }}</p>
+        @if (lead.state() === 'error') {
+          <app-lead-failure [message]="messages.general" location="cierre-error" />
         }
       </form>
     }
   `,
 })
 export class ContactForm {
-  private readonly fb = inject(NonNullableFormBuilder);
-  private readonly leads = inject(Leads);
-  private readonly analytics = inject(Analytics);
-  private readonly document = inject(DOCUMENT);
-  private readonly injector = inject(Injector);
-  private readonly successEl = viewChild<ElementRef<HTMLElement>>('success');
-
   protected readonly ids = FIELD_IDS;
   protected readonly needs = NEEDS;
   protected readonly utmKeys = UTM_KEYS;
   protected readonly messages = WHATSAPP_MESSAGES;
   protected readonly responseNote = tbd('Te respondemos en menos de 1 día hábil.');
-  protected readonly successNote = tbd('Te escribimos en menos de 1 día hábil.');
-  protected readonly errorNote = tbd('[Mensaje si no se pudo enviar]', 'Pendiente');
 
-  protected readonly form = this.fb.group({
+  protected readonly form = inject(NonNullableFormBuilder).group({
     nombre: ['', [Validators.required, Validators.maxLength(120)]],
     negocio: ['', [Validators.required, Validators.maxLength(160)]],
     contacto: ['', [Validators.required, contactValidator]],
@@ -175,51 +136,20 @@ export class ContactForm {
     privacidad: [false, Validators.requiredTrue],
   });
 
-  protected readonly state = signal<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  protected readonly status = signal('');
-  protected readonly firstName = signal('');
-  protected readonly utm = signal<Utm>({});
+  protected readonly lead = injectLeadForm(FIELD_IDS);
 
-  constructor() {
-    afterNextRender(() => this.utm.set(this.leads.utm()));
-  }
-
-  protected async submit(): Promise<void> {
-    if (this.state() === 'sending') return;
-    this.form.markAllAsTouched();
-    if (this.form.invalid) {
-      this.status.set('Revisa los campos marcados.');
-      const first = (Object.keys(FIELD_IDS) as (keyof typeof FIELD_IDS)[]).find(
-        (key) => this.form.controls[key].invalid,
-      );
-      if (first) this.document.getElementById(FIELD_IDS[first])?.focus();
-      return;
-    }
-
-    const value = this.form.getRawValue();
-    this.state.set('sending');
-    this.status.set('');
-    try {
-      await this.leads.send({
+  protected submit(): Promise<void> {
+    return this.lead.submit(this.form, (utm) => {
+      const value = this.form.getRawValue();
+      return {
         origen: 'cierre',
         nombre: value.nombre.trim(),
         negocio: value.negocio.trim(),
         contacto: value.contacto.trim(),
         necesidad: value.necesidad,
         plan: null,
-        utm: this.utm(),
-      });
-      this.analytics.track('lead_enviado', {
-        origen: 'cierre',
-        plan: null,
-        canal: this.utm().utm_source ?? 'directo',
-      });
-      this.firstName.set(value.nombre.trim().split(/\s+/)[0]);
-      this.state.set('sent');
-      afterNextRender(() => this.successEl()?.nativeElement.focus(), { injector: this.injector });
-    } catch (error) {
-      if (!(error instanceof LeadError)) console.error(error);
-      this.state.set('error');
-    }
+        utm,
+      };
+    });
   }
 }

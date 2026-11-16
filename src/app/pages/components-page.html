@@ -297,6 +297,26 @@
       <article appCaseCard [case]="cases[0]"></article>
       <article appCaseCard [case]="cases[2]"></article>
     </div>
+
+    <p appDemoLabel>Tarjeta de plan: clara, oscura y arena (sale de content/plans.ts)</p>
+    <div class="grid gap-6 md:grid-cols-3">
+      @for (plan of plans; track plan.id) {
+        <article appPlanCard [plan]="plan"></article>
+      }
+    </div>
+
+    <p appDemoLabel>Radar: sin respuestas, a medias y completo</p>
+    <div class="grid gap-6 sm:grid-cols-3">
+      @for (values of radarDemos; track $index) {
+        <app-radar-chart class="rounded-md border border-border p-4" [values]="values" />
+      }
+    </div>
+
+    <p appDemoLabel>Formulario: enviado y error al enviar</p>
+    <div class="grid gap-6 md:grid-cols-2">
+      <app-lead-success name="Ana" />
+      <app-lead-failure [message]="generalMessage" location="componentes" />
+    </div>
   </section>
 
   <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-organismos">
@@ -306,6 +326,37 @@
       @for (organism of organisms; track organism.fragment) {
         <a appLinkArrow routerLink="/" [fragment]="organism.fragment">{{ organism.label }}</a>
       }
+    </div>
+  </section>
+
+  <section class="grid gap-4 border-t border-border pt-8 pb-16" aria-labelledby="sg-pruebas">
+    <h2 appH3 id="sg-pruebas">Pruebas del diagnóstico</h2>
+    <p class="font-bold" [class.text-plum]="passed() < tests.length">
+      {{ passed() }} de {{ tests.length }} casos pasan.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-start text-sm">
+        <thead>
+          <tr class="border-b-2 border-navy text-start">
+            <th scope="col" class="py-2 pe-4 text-start">V · C · F · N · D · P</th>
+            <th scope="col" class="py-2 pe-4 text-start">Plan esperado</th>
+            <th scope="col" class="py-2 pe-4 text-start">Foco esperado</th>
+            <th scope="col" class="py-2 text-start">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (test of tests; track $index) {
+            <tr class="border-b border-border">
+              <td class="py-2 pe-4 whitespace-nowrap">{{ test.answers }}</td>
+              <td class="py-2 pe-4">{{ test.plan }}</td>
+              <td class="py-2 pe-4">{{ test.focus }}</td>
+              <td class="py-2 font-bold" [class.text-plum]="!test.ok">
+                {{ test.ok ? 'Pasa' : 'Falla: ' + test.got }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
   </section>
 </div>

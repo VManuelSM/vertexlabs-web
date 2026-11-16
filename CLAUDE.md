@@ -174,6 +174,12 @@ Las carpetas se crean conforme las pide cada etapa.
 - Solo `transform` y `opacity`, de 150 a 250 ms.
 - Con `prefers-reduced-motion: reduce`, nada se anima (los tokens de duración bajan a 0 ms).
 - Nunca alteres el scroll del navegador (nada de `scroll-behavior: smooth`).
+- Excepción WebGL (aprobada por Víctor): (1) el degradado de marca vivo detrás de las capturas del
+  hero y los casos y en la banda de cierre, con el degradado CSS prerenderizado como respaldo; (2)
+  el relieve del radar del diagnóstico (`diagnostic/radar-gl.ts`), que cambia de forma en
+  `--motion-base` y solo usa el rosa (la luz cambia la opacidad, no el color). El SVG del radar
+  sigue siendo la versión accesible y el respaldo sin WebGL. Con movimiento reducido, todo queda
+  quieto; nada se dibuja fuera de pantalla ni en bucle sin necesidad.
 
 ## Accesibilidad (mínimos)
 
