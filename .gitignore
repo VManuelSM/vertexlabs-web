@@ -46,3 +46,6 @@ Thumbs.db
 # Playwright
 /test-results
 /playwright-report
+
+# Caché del hook de diseño (impeccable); la configuración sí se versiona
+.impeccable/hook.cache.json

@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/app/components/molecules/testimonial.ts"
+        ],
+        "createdAt": "2026-11-16T01:45:57.208Z",
+        "reason": "Diseño del prototipo v1 (fuente de verdad visual según CLAUDE.md): docs/prototipo-v1.html:270 define .quote{border-left:3px solid var(--brand-pink)} para la cita del testimonio; es un blockquote, no una tarjeta"
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/app/components/molecules/case-card.ts"
+        ],
+        "createdAt": "2026-11-16T02:19:15.428Z",
+        "reason": "Claude: el borde es solo inferior (border-b-2 punteado, el marcador 'Captura por agregar' del prototipo) y el redondeo solo superior (rounded-t-md, para seguir la esquina de la tarjeta sin overflow-hidden); no se tocan"
+      }
+    ]
+  }
+}
