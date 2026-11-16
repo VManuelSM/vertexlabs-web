@@ -1,3 +1,4 @@
+import { compileProgram, tokenColor, tokenMs } from '@app/core/webgl';
 import { RADAR, radarPoint } from './radar-geometry';
 
 /*
@@ -66,42 +67,6 @@ const PEAK = 55;
 const STROKE = 2.5;
 const DOT = 8;
 
-const compile = (gl: WebGL2RenderingContext, vertex: string, fragment: string) => {
-  const program = gl.createProgram();
-  for (const [type, source] of [
-    [gl.VERTEX_SHADER, vertex],
-    [gl.FRAGMENT_SHADER, fragment],
-  ] as const) {
-    const shader = gl.createShader(type);
-    if (!shader) return null;
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return null;
-    gl.attachShader(program, shader);
-  }
-  gl.linkProgram(program);
-  return gl.getProgramParameter(program, gl.LINK_STATUS) ? program : null;
-};
-
-/** Color de un token (`--brand-pink`) en 0..1, resuelto por el navegador. */
-const tokenColor = (host: HTMLElement, token: string): [number, number, number] => {
-  const probe = document.createElement('span');
-  probe.style.color = `var(${token})`;
-  probe.hidden = true;
-  host.append(probe);
-  const rgb = getComputedStyle(probe)
-    .color.match(/[\d.]+/g)
-    ?.map(Number) ?? [0, 0, 0];
-  probe.remove();
-  return [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255];
-};
-
-const tokenMs = (token: string): number => {
-  const raw = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
-  const n = parseFloat(raw);
-  return Number.isFinite(n) ? (raw.endsWith('ms') ? n : n * 1000) : 0;
-};
-
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
 export class RadarRelief {
@@ -154,8 +119,8 @@ export class RadarRelief {
       antialias: true,
     });
     if (!gl) return null;
-    const faces = compile(gl, VERTEX, FRAGMENT);
-    const dots = compile(gl, DOT_VERTEX, DOT_FRAGMENT);
+    const faces = compileProgram(gl, VERTEX, FRAGMENT);
+    const dots = compileProgram(gl, DOT_VERTEX, DOT_FRAGMENT);
     if (!faces || !dots) return null;
     canvas.addEventListener(
       'webglcontextlost',

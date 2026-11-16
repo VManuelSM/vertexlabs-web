@@ -7,11 +7,22 @@ import { Icon } from '../atoms/icon';
 import { Wrap } from '../atoms/layout';
 import { PhoneFrame } from '../atoms/phone-frame';
 import { TextImports } from '../atoms/text';
+import { SectionLink } from '@app/core/current-path';
 
 /** Hero: etiqueta, H1 en Good Timing, subtítulo, dos acciones y dos capturas reales. */
 @Component({
   selector: 'app-hero',
-  imports: [BrandGradient, HlmButton, Icon, PhoneFrame, TextImports, TrackCta, WhatsappLink, Wrap],
+  imports: [
+    SectionLink,
+    BrandGradient,
+    HlmButton,
+    Icon,
+    PhoneFrame,
+    TextImports,
+    TrackCta,
+    WhatsappLink,
+    Wrap,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="inicio" aria-labelledby="hero-title" class="pt-12 pb-16 md:pt-16 md:pb-24">
@@ -24,7 +35,7 @@ import { TextImports } from '../atoms/text';
             diagnóstico gratis de 3 minutos y te decimos qué necesitas (y qué no).
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a hlmBtn href="/#diagnostico" appTrack="hero">Haz tu diagnóstico gratis</a>
+            <a hlmBtn appSection="diagnostico" appTrack="hero">Haz tu diagnóstico gratis</a>
             <a hlmBtn variant="outline" [appWhatsapp]="messages.general" location="hero">
               <app-icon name="chat" />Escríbenos por WhatsApp
             </a>
@@ -34,7 +45,7 @@ import { TextImports } from '../atoms/text';
         <figure
           class="relative isolate m-0 aspect-square overflow-hidden rounded-lg md:aspect-auto md:h-140"
         >
-          <app-brand-gradient />
+          <app-brand-gradient live />
           <app-phone-frame
             class="absolute start-1/12 -bottom-1/12 w-11/25"
             src="/images/planifica-tu-vivienda.jpg"

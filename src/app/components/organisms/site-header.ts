@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { HlmButton } from '@ui/button';
-import { injectCurrentPath } from '@app/core/current-path';
+import { SectionLink } from '@app/core/current-path';
 import { TrackCta, WHATSAPP_MESSAGES, WhatsappLink } from '@app/core/whatsapp';
 import { Icon } from '../atoms/icon';
 import { Wrap } from '../atoms/layout';
 import { Logo } from '../atoms/logo';
 
 const NAV = [
-  { href: '/#planes', label: 'Planes', mobile: 'Planes' },
-  { href: '/#diagnostico', label: 'Diagnóstico', mobile: 'Diagnóstico gratis' },
-  { href: '/#casos', label: 'Casos', mobile: 'Casos' },
-  { href: '/#preguntas', label: 'Preguntas', mobile: 'Preguntas' },
+  { id: 'planes', label: 'Planes', mobile: 'Planes' },
+  { id: 'diagnostico', label: 'Diagnóstico', mobile: 'Diagnóstico gratis' },
+  { id: 'casos', label: 'Casos', mobile: 'Casos' },
+  { id: 'preguntas', label: 'Preguntas', mobile: 'Preguntas' },
 ] as const;
 
 /** Encabezado fijo: logo, navegación, WhatsApp, diagnóstico y menú desplegable en celular. */
 @Component({
   selector: 'app-site-header',
-  imports: [HlmButton, Icon, Logo, TrackCta, WhatsappLink, Wrap],
+  imports: [SectionLink, HlmButton, Icon, Logo, TrackCta, WhatsappLink, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'sticky top-0 z-(--z-header) block border-b border-border bg-white',
@@ -25,17 +25,22 @@ const NAV = [
   template: `
     <a
       class="absolute start-4 -top-16 z-(--z-float) rounded-sm bg-navy px-4 py-2 font-bold text-white focus:top-3"
-      [attr.href]="path() + '#principal'"
+      appSection="principal"
+      page=""
       >Saltar al contenido</a
     >
     <div appWrap class="flex min-h-17 items-center justify-between gap-4">
-      <a href="/#inicio" class="inline-flex py-2 text-navy" aria-label="Vertex Labs, ir al inicio">
+      <a
+        appSection="inicio"
+        class="inline-flex py-2 text-navy"
+        aria-label="Vertex Labs, ir al inicio"
+      >
         <app-logo class="h-9" />
       </a>
       <nav class="hidden gap-8 md:flex" aria-label="Principal">
-        @for (item of nav; track item.href) {
+        @for (item of nav; track item.id) {
           <a
-            [href]="item.href"
+            [appSection]="item.id"
             class="border-b-2 border-transparent py-2 text-base font-semibold transition-colors hover:border-pink"
             >{{ item.label }}</a
           >
@@ -55,7 +60,7 @@ const NAV = [
           hlmBtn
           variant="dark"
           class="hidden sm:inline-flex"
-          href="/#diagnostico"
+          appSection="diagnostico"
           appTrack="encabezado"
           >Diagnóstico gratis</a
         >
@@ -76,10 +81,10 @@ const NAV = [
     </div>
     <div id="menu-movil" class="border-t border-border bg-white md:hidden" [hidden]="!menuOpen()">
       <ul appWrap class="grid pt-2 pb-4">
-        @for (item of nav; track item.href) {
+        @for (item of nav; track item.id) {
           <li>
             <a
-              [href]="item.href"
+              [appSection]="item.id"
               class="block py-3 text-base font-bold"
               (click)="menuOpen.set(false)"
               >{{ item.mobile }}</a
@@ -94,5 +99,4 @@ export class SiteHeader {
   protected readonly nav = NAV;
   protected readonly messages = WHATSAPP_MESSAGES;
   protected readonly menuOpen = signal(false);
-  protected readonly path = injectCurrentPath();
 }

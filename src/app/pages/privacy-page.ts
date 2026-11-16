@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { TbdMark } from '@app/components/atoms/copy';
 import { Wrap } from '@app/components/atoms/layout';
 import { LinkArrow } from '@app/components/atoms/link-arrow';
 import { TextImports } from '@app/components/atoms/text';
+import { Seo } from '@app/core/seo';
 
 /**
  * Aviso de privacidad: por ahora solo la estructura del prototipo.
@@ -48,6 +48,6 @@ import { TextImports } from '@app/components/atoms/text';
 })
 export class PrivacyPage {
   constructor() {
-    inject(Title).setTitle('Aviso de privacidad · Vertex Labs');
+    inject(Seo).set({ title: 'Aviso de privacidad · Vertex Labs', path: '/aviso-de-privacidad' });
   }
 }

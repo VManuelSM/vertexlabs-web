@@ -5,11 +5,12 @@ import { SectionHead, Wrap } from '../atoms/layout';
 import { LinkArrow } from '../atoms/link-arrow';
 import { TextImports } from '../atoms/text';
 import { PlanCard } from '../molecules/plan-card';
+import { SectionLink } from '@app/core/current-path';
 
 /** Planes y precios: tres tarjetas y la nota de mantenimiento mensual. */
 @Component({
   selector: 'app-plans',
-  imports: [LinkArrow, PlanCard, SectionHead, TextImports, TrackCta, Wrap],
+  imports: [SectionLink, LinkArrow, PlanCard, SectionHead, TextImports, TrackCta, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="planes" aria-labelledby="planes-title" class="bg-surface py-section">
@@ -31,7 +32,7 @@ import { PlanCard } from '../molecules/plan-card';
             <b>Después del lanzamiento:</b> mantenimiento, mejoras y soporte mes a mes, para que tu
             sitio siga funcionando. Se cotiza según tu proyecto.
           </p>
-          <a appLinkArrow href="/#diagnostico" appTrack="planes-no-se"
+          <a appLinkArrow appSection="diagnostico" appTrack="planes-no-se"
             >¿No sabes cuál elegir? Haz el diagnóstico</a
           >
         </div>

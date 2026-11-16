@@ -6,6 +6,7 @@ import { Icon } from '../atoms/icon';
 import { Wrap } from '../atoms/layout';
 import { TextImports } from '../atoms/text';
 import { ContactForm } from './contact-form';
+import { SectionLink } from '@app/core/current-path';
 
 /**
  * Cierre sobre el degradado de marca. El texto va sobre una capa azul marino para quedar siempre
@@ -13,7 +14,17 @@ import { ContactForm } from './contact-form';
  */
 @Component({
   selector: 'app-closing',
-  imports: [BrandGradient, ContactForm, HlmButton, Icon, TextImports, TrackCta, WhatsappLink, Wrap],
+  imports: [
+    SectionLink,
+    BrandGradient,
+    ContactForm,
+    HlmButton,
+    Icon,
+    TextImports,
+    TrackCta,
+    WhatsappLink,
+    Wrap,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
@@ -22,7 +33,7 @@ import { ContactForm } from './contact-form';
       class="relative isolate overflow-hidden text-white"
       data-surface="dark"
     >
-      <app-brand-gradient />
+      <app-brand-gradient live />
       <span
         aria-hidden="true"
         class="absolute inset-0 -z-10 bg-linear-to-b from-navy/95 via-navy/90 to-plum/70 md:bg-linear-to-r md:from-navy/95 md:via-navy/85 md:to-transparent"
@@ -35,7 +46,7 @@ import { ContactForm } from './contact-form';
             El diagnóstico es gratis y toma 3 minutos. Si prefieres hablar directo, escríbenos.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a hlmBtn href="/#diagnostico" appTrack="cierre">Haz tu diagnóstico gratis</a>
+            <a hlmBtn appSection="diagnostico" appTrack="cierre">Haz tu diagnóstico gratis</a>
             <a hlmBtn variant="light" [appWhatsapp]="messages.general" location="cierre">
               <app-icon name="chat" />Escríbenos por WhatsApp
             </a>

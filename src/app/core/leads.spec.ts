@@ -28,4 +28,45 @@ describe('contactos', () => {
       leads.send({ origen: 'cierre', nombre: 'Ana', negocio: 'Florería', contacto: 'x', utm: {} }),
     ).rejects.toEqual(new LeadError('sin-servicio'));
   });
+
+  describe('con servicio de formularios', () => {
+    const lead = {
+      origen: 'diagnostico' as const,
+      nombre: 'Ana',
+      negocio: 'Florería',
+      contacto: '7711234567',
+      plan: 'crecer',
+      diagnostico: 'V2 C3 F1 N4 D3 P2 · plan crecer · foco F',
+      utm: { utm_source: 'facebook' },
+    };
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [
+          {
+            provide: SITE_CONFIG,
+            useValue: { ...SITE, leadEndpoint: 'https://formularios.test/x' },
+          },
+        ],
+      });
+    });
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('envía el contacto con el resultado y los UTM en JSON', async () => {
+      const fetchMock = vi.fn().mockResolvedValue(new Response('{}', { status: 200 }));
+      vi.stubGlobal('fetch', fetchMock);
+      await TestBed.inject(Leads).send(lead);
+      const [url, init] = fetchMock.mock.calls[0];
+      expect(url).toBe('https://formularios.test/x');
+      expect(init.method).toBe('POST');
+      expect(JSON.parse(init.body)).toEqual(lead);
+    });
+
+    it('marca el error si el servicio lo rechaza o no hay red', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 500 })));
+      await expect(TestBed.inject(Leads).send(lead)).rejects.toEqual(new LeadError('rechazado'));
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')));
+      await expect(TestBed.inject(Leads).send(lead)).rejects.toEqual(new LeadError('red'));
+    });
+  });
 });

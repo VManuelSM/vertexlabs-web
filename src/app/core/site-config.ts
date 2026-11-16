@@ -19,6 +19,8 @@ export interface SiteConfig {
    * Sin él, el formulario muestra el estado de error en lugar de fingir que envió.
    */
   readonly leadEndpoint: string | null;
+  /** TODO(dato): imagen para compartir de 1200 × 630 en `public/` ("/og-1200x630.jpg"). */
+  readonly shareImage: string | null;
 }
 
 export const SITE: SiteConfig = {
@@ -28,6 +30,7 @@ export const SITE: SiteConfig = {
   siteUrl: null,
   legalName: null,
   leadEndpoint: null,
+  shareImage: null,
 };
 
 export const SITE_CONFIG = new InjectionToken<SiteConfig>('SITE_CONFIG', {

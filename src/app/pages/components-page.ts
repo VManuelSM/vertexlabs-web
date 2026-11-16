@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Directive, inject } from '@angular/core';
-import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { BrnAccordion } from '@spartan-ng/brain/accordion';
 import { HlmBadge } from '@ui/badge';
@@ -31,7 +30,9 @@ import { tbd } from '@app/content/copy';
 import { planById, PLANS } from '@app/content/plans';
 import { AXES, FOCUS } from '@app/diagnostic/axes';
 import { RECOMMEND_CASES, recommend, toScores } from '@app/diagnostic/recommend';
+import { Seo } from '@app/core/seo';
 import { WHATSAPP_MESSAGES } from '@app/core/whatsapp';
+import { SectionLink } from '@app/core/current-path';
 
 interface Swatch {
   readonly name: string;
@@ -62,6 +63,7 @@ export class DemoLabel {}
 @Component({
   selector: 'app-components-page',
   imports: [
+    SectionLink,
     AnswerOption,
     BrnAccordion,
     CaseCard,
@@ -240,7 +242,6 @@ export class ComponentsPage {
   protected readonly pendingAuthor = tbd('[Nombre, cargo, negocio]', 'Pendiente');
 
   constructor() {
-    inject(Title).setTitle('Componentes · Vertex Labs');
-    inject(Meta).updateTag({ name: 'robots', content: 'noindex, nofollow' });
+    inject(Seo).set({ title: 'Componentes · Vertex Labs', path: '/componentes', noindex: true });
   }
 }

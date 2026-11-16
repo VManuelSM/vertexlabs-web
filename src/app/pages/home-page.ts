@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Cases } from '@app/components/organisms/cases';
 import { Closing } from '@app/components/organisms/closing';
 import { Diagnostic } from '@app/components/organisms/diagnostic';
@@ -9,6 +9,9 @@ import { Problems } from '@app/components/organisms/problems';
 import { Process } from '@app/components/organisms/process';
 import { Team } from '@app/components/organisms/team';
 import { TrustStrip } from '@app/components/organisms/trust-strip';
+import { businessJsonLd, HOME_HEAD } from '@app/content/seo';
+import { Seo } from '@app/core/seo';
+import { SITE_CONFIG } from '@app/core/site-config';
 
 /** Inicio: una sola página con todas las secciones, en el orden del prototipo. */
 @Component({
@@ -28,4 +31,8 @@ import { TrustStrip } from '@app/components/organisms/trust-strip';
     <app-closing />
   `,
 })
-export class HomePage {}
+export class HomePage {
+  constructor() {
+    inject(Seo).set({ ...HOME_HEAD, path: '/', jsonLd: businessJsonLd(inject(SITE_CONFIG)) });
+  }
+}

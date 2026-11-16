@@ -19,7 +19,7 @@ import { Testimonial } from './testimonial';
     @let study = case();
     @if (study.image; as image) {
       <div class="relative isolate h-56 overflow-hidden">
-        <app-brand-gradient />
+        <app-brand-gradient live />
         <app-phone-frame
           class="absolute start-1/2 top-6 w-1/2 -translate-x-1/2"
           [src]="image.src"

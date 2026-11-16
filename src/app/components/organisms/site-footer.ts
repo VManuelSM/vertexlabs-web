@@ -5,18 +5,23 @@ import { SITE_CONFIG } from '@app/core/site-config';
 import { CopyText } from '../atoms/copy';
 import { Wrap } from '../atoms/layout';
 import { Logo } from '../atoms/logo';
+import { SectionLink } from '@app/core/current-path';
 
 /** Pie de página: contacto, mapa del sitio y datos legales. */
 @Component({
   selector: 'app-site-footer',
-  imports: [CopyText, Logo, RouterLink, Wrap],
+  imports: [SectionLink, CopyText, Logo, RouterLink, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block bg-navy text-sand', 'data-surface': 'dark' },
   template: `
     <footer appWrap class="grid gap-8 pt-16 pb-24">
       <div class="grid gap-8 md:grid-cols-3 md:gap-12">
         <div class="grid content-start gap-4">
-          <a href="/#inicio" class="inline-flex text-white" aria-label="Vertex Labs, ir al inicio">
+          <a
+            appSection="inicio"
+            class="inline-flex text-white"
+            aria-label="Vertex Labs, ir al inicio"
+          >
             <app-logo class="h-10" />
           </a>
           <p>Medimos tu negocio. Construimos el resto.</p>
@@ -33,10 +38,10 @@ import { Logo } from '../atoms/logo';
         <div>
           <h2 class="mb-3 text-xs font-bold tracking-eyebrow text-white uppercase">Sitio</h2>
           <ul class="grid gap-2">
-            <li><a class="text-white hover:underline" href="/#planes">Planes</a></li>
-            <li><a class="text-white hover:underline" href="/#diagnostico">Diagnóstico</a></li>
-            <li><a class="text-white hover:underline" href="/#casos">Casos</a></li>
-            <li><a class="text-white hover:underline" href="/#preguntas">Preguntas</a></li>
+            <li><a class="text-white hover:underline" appSection="planes">Planes</a></li>
+            <li><a class="text-white hover:underline" appSection="diagnostico">Diagnóstico</a></li>
+            <li><a class="text-white hover:underline" appSection="casos">Casos</a></li>
+            <li><a class="text-white hover:underline" appSection="preguntas">Preguntas</a></li>
             <li>
               <a class="text-white hover:underline" routerLink="/aviso-de-privacidad"
                 >Aviso de privacidad</a
