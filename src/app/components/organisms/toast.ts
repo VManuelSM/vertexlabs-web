@@ -12,7 +12,9 @@ import { Toasts } from '@app/core/toast';
   },
   template: `
     @if (toasts.current(); as toast) {
-      <p class="rounded-md bg-navy px-4 py-3 text-sm leading-snug text-white shadow-md">
+      <p
+        class="animate-enter rounded-md bg-navy px-4 py-3 text-sm leading-snug text-white shadow-md"
+      >
         {{ toast.lead }}<br /><b class="text-sand">«{{ toast.quote }}»</b>
       </p>
     }

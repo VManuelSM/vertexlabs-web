@@ -3,11 +3,12 @@ import { CASES } from '@app/content/cases';
 import { SectionHead, Wrap } from '../atoms/layout';
 import { TextImports } from '../atoms/text';
 import { CaseCard } from '../molecules/case-card';
+import { Reveal } from '@app/core/motion';
 
 /** Casos: fichas de proyectos reales y la nota de Kindu. */
 @Component({
   selector: 'app-cases',
-  imports: [CaseCard, SectionHead, TextImports, Wrap],
+  imports: [Reveal, CaseCard, SectionHead, TextImports, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="casos" aria-labelledby="casos-title" class="bg-surface py-section">
@@ -19,10 +20,10 @@ import { CaseCard } from '../molecules/case-card';
         </header>
         <div class="grid gap-6 md:grid-cols-3">
           @for (study of cases; track study.id) {
-            <article appCaseCard [case]="study"></article>
+            <article appCaseCard [case]="study" [appReveal]="$index"></article>
           }
         </div>
-        <p class="mt-8 max-w-copy text-muted-foreground">
+        <p appReveal class="mt-8 max-w-copy text-muted-foreground">
           Además, creamos y operamos Kindu, nuestra propia app de finanzas personales. Lo que
           aprendemos ahí lo aplicamos en tu proyecto.
         </p>

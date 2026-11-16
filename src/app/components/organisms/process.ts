@@ -4,6 +4,7 @@ import { BrandGradient } from '../atoms/brand-gradient';
 import { SectionHead, Wrap } from '../atoms/layout';
 import { TextImports } from '../atoms/text';
 import { ProcessStep } from '../molecules/process-step';
+import { Reveal } from '@app/core/motion';
 
 const CHIP = {
   done: 'bg-navy text-white',
@@ -14,7 +15,7 @@ const CHIP = {
 /** Cómo trabajamos: los cuatro pasos y el portal de cliente. */
 @Component({
   selector: 'app-process',
-  imports: [BrandGradient, ProcessStep, SectionHead, TextImports, Wrap],
+  imports: [Reveal, BrandGradient, ProcessStep, SectionHead, TextImports, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="proceso" aria-labelledby="proceso-title" class="py-section">
@@ -25,10 +26,17 @@ const CHIP = {
         </header>
         <ol class="grid gap-6 md:grid-cols-4">
           @for (step of steps; track step.title; let i = $index) {
-            <li appProcessStep [number]="i + 1" [heading]="step.title" [text]="step.text"></li>
+            <li
+              appProcessStep
+              [appReveal]="i"
+              [number]="i + 1"
+              [heading]="step.title"
+              [text]="step.text"
+            ></li>
           }
         </ol>
         <div
+          appReveal
           class="mt-12 grid items-center gap-8 rounded-lg border border-border bg-surface p-8 md:grid-cols-2 md:p-12"
         >
           <div class="grid gap-4">
@@ -60,7 +68,9 @@ const CHIP = {
                   <span>Avance</span><span>{{ portal.progress }}%</span>
                 </div>
                 <div class="mt-2 h-2 overflow-hidden rounded-pill bg-sand">
-                  <span class="block h-full w-3/5 bg-pink"></span>
+                  <span
+                    class="block h-full w-3/5 origin-left bg-pink transition-transform delay-(--motion-fast) duration-(--motion-base) revealing:scale-x-0"
+                  ></span>
                 </div>
               </div>
               @for (row of portal.rows; track row.label) {

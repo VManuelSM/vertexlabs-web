@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SectionHead, Wrap } from '../atoms/layout';
 import { TextImports } from '../atoms/text';
 import { DiagnosticPanel } from './diagnostic-panel';
+import { Reveal } from '@app/core/motion';
 
 /** Diagnóstico gratis (Radar). */
 @Component({
   selector: 'app-diagnostic',
-  imports: [DiagnosticPanel, SectionHead, TextImports, Wrap],
+  imports: [Reveal, DiagnosticPanel, SectionHead, TextImports, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="diagnostico" aria-labelledby="diagnostico-title" class="py-section">
@@ -23,14 +24,16 @@ import { DiagnosticPanel } from './diagnostic-panel';
           carga al acercarse a la vista. En navegación interna se dibuja en cuanto el navegador está
           libre.
         -->
-        @defer (on idle; hydrate on viewport) {
-          <app-diagnostic-panel />
-        } @placeholder {
-          <div
-            aria-hidden="true"
-            class="min-h-140 rounded-lg border border-border bg-white shadow-md"
-          ></div>
-        }
+        <div appReveal>
+          @defer (on idle; hydrate on viewport) {
+            <app-diagnostic-panel />
+          } @placeholder {
+            <div
+              aria-hidden="true"
+              class="min-h-140 rounded-lg border border-border bg-white shadow-md"
+            ></div>
+          }
+        </div>
       </div>
     </section>
   `,

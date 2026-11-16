@@ -140,6 +140,11 @@
 @custom-variant active (&:active, &[data-demo~='active']);
 
 @layer base {
+  /* Escalonado: cada elemento de una lista (`--stagger`: 0, 1, 2…) entra 50 ms después del anterior. */
+  * {
+    --stagger-delay: calc(var(--stagger, 0) * var(--motion-fast) / 3);
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -158,4 +163,131 @@
   [id] {
     scroll-margin-top: calc(var(--tap-min) + var(--space-6));
   }
+}
+
+/*
+ * Movimiento del sitio. Solo `transform` y `opacity`, con las duraciones y la curva del manual;
+ * con movimiento reducido los tokens bajan a 0 ms y todo aparece en su lugar al instante.
+ * El escalonado (`--stagger`, el índice del elemento) también sale de un token. `inline` hace que el
+ * retraso se calcule en cada elemento y no una sola vez en :root.
+ */
+@theme inline {
+  --animate-enter: enter var(--motion-base) var(--ease) var(--stagger-delay) both;
+  --animate-enter-next: enter-next var(--motion-base) var(--ease) var(--stagger-delay) both;
+  --animate-enter-back: enter-back var(--motion-base) var(--ease) var(--stagger-delay) both;
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(var(--space-3));
+    }
+  }
+  @keyframes enter-next {
+    from {
+      opacity: 0;
+      transform: translateX(var(--space-6));
+    }
+  }
+  @keyframes enter-back {
+    from {
+      opacity: 0;
+      transform: translateX(calc(var(--space-6) * -1));
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Aparición al hacer scroll (directiva Reveal). Solo se ocultan, ya hidratado, los elementos que
+   * están debajo de la pantalla: lo que se ve al cargar nunca se esconde.
+   */
+  [data-reveal] {
+    transition:
+      opacity var(--motion-base) var(--ease),
+      transform var(--motion-base) var(--ease);
+    transition-delay: var(--stagger-delay);
+  }
+  [data-reveal='hidden'] {
+    opacity: 0;
+    transform: translateY(var(--space-6));
+  }
+  @media print {
+    [data-reveal='hidden'] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Encabezado: la sombra aparece (opacidad) en cuanto la página se mueve. */
+  .header-shadow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--motion-base) var(--ease);
+  }
+  .header-shadow[data-scrolled]::after {
+    opacity: 1;
+  }
+}
+
+/* Algo que vive dentro de un elemento que todavía no aparece (p. ej., la barra de avance). */
+@custom-variant revealing (&:where([data-reveal='hidden'] *));
+
+/*
+ * Tarjeta que se levanta al pasar el cursor: sube con `transform` y su sombra entra con `opacity`
+ * en un pseudo-elemento (la sombra no se anima directamente).
+ */
+@utility lift {
+  position: relative;
+  /* Sin `transition` abreviado: así conserva el retraso escalonado de la aparición (Reveal). */
+  transition-property: transform, opacity;
+  transition-duration: var(--motion-base);
+  transition-timing-function: var(--ease);
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--motion-base) var(--ease);
+  }
+  @media (hover: hover) {
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+  /* Con movimiento reducido solo aparece la sombra; la tarjeta no se mueve. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(calc(var(--space-1) * -1));
+    }
+  }
+  &[data-demo~='hover'] {
+    transform: translateY(calc(var(--space-1) * -1));
+  }
+  &[data-demo~='hover']::after {
+    opacity: 1;
+  }
+}
+
+/*
+ * Profundidad en las capturas del hero: la directiva Parallax pone --px y --py (de -1 a 1) según el
+ * cursor; la captura de enfrente se mueve más y la de atrás menos, en sentido contrario.
+ */
+@utility parallax-near {
+  transform: translate(calc(var(--px, 0) * var(--space-4)), calc(var(--py, 0) * var(--space-4)));
+  transition: transform var(--motion-base) var(--ease);
+}
+@utility parallax-far {
+  transform: translate(
+    calc(var(--px, 0) * var(--space-2) * -1),
+    calc(var(--py, 0) * var(--space-2) * -1)
+  );
+  transition: transform var(--motion-base) var(--ease);
 }

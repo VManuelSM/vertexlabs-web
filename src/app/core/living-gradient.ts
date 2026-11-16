@@ -29,7 +29,7 @@ uniform vec3 uSand;
 out vec4 outColor;
 
 vec2 drift(float speed, float phase) {
-  return 0.06 * vec2(sin(uTime * speed + phase) - sin(phase), sin(uTime * speed * 0.8 + phase * 1.7) - sin(phase * 1.7));
+  return 0.12 * vec2(sin(uTime * speed + phase) - sin(phase), sin(uTime * speed * 0.8 + phase * 1.7) - sin(phase * 1.7));
 }
 
 float blob(vec2 center, vec2 radius, float alpha, float end) {
@@ -48,11 +48,11 @@ void main() {
     : t < 0.72 ? mix(uPlum, uPink, (t - 0.45) / 0.27)
     : mix(uPink, uSand, (t - 0.72) / 0.28);
 
-  float breathe = 1.0 + 0.05 * sin(uTime * 0.21);
-  color = mix(color, uPink, blob(vec2(0.70, 0.25) + drift(0.17, 0.0), vec2(0.45, 0.70) * breathe, 1.0, 0.75));
-  color = mix(color, uPlum, blob(vec2(0.42, 0.70) + drift(0.13, 1.3), vec2(0.55, 0.80), 1.0, 0.75));
-  color = mix(color, uNavy, blob(vec2(0.08, 1.00) + drift(0.11, 2.1), vec2(0.60, 0.90), 1.0, 0.75));
-  color = mix(color, uSteel, blob(vec2(0.00, 0.00) + drift(0.15, 3.7), vec2(0.55, 0.75) / breathe, 0.95, 0.70));
+  float breathe = 1.0 + 0.08 * sin(uTime * 0.38);
+  color = mix(color, uPink, blob(vec2(0.70, 0.25) + drift(0.31, 0.0), vec2(0.45, 0.70) * breathe, 1.0, 0.75));
+  color = mix(color, uPlum, blob(vec2(0.42, 0.70) + drift(0.24, 1.3), vec2(0.55, 0.80), 1.0, 0.75));
+  color = mix(color, uNavy, blob(vec2(0.08, 1.00) + drift(0.20, 2.1), vec2(0.60, 0.90), 1.0, 0.75));
+  color = mix(color, uSteel, blob(vec2(0.00, 0.00) + drift(0.27, 3.7), vec2(0.55, 0.75) / breathe, 0.95, 0.70));
 
   // Un poco de ruido para que el degradado no haga bandas.
   float noise = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;

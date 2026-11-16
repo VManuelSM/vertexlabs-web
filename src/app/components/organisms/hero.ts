@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { HlmButton } from '@ui/button';
 import { startingPrice } from '@app/content/plans';
+import { Parallax } from '@app/core/motion';
 import { TrackCta, WHATSAPP_MESSAGES, WhatsappLink } from '@app/core/whatsapp';
 import { BrandGradient } from '../atoms/brand-gradient';
 import { Icon } from '../atoms/icon';
@@ -13,6 +14,7 @@ import { SectionLink } from '@app/core/current-path';
 @Component({
   selector: 'app-hero',
   imports: [
+    Parallax,
     SectionLink,
     BrandGradient,
     HlmButton,
@@ -43,17 +45,18 @@ import { SectionLink } from '@app/core/current-path';
           <p appNote class="mt-4">Sin costo ni compromiso · Facturamos · {{ startingPrice }}</p>
         </div>
         <figure
+          appParallax
           class="relative isolate m-0 aspect-square overflow-hidden rounded-lg md:aspect-auto md:h-140"
         >
           <app-brand-gradient live />
           <app-phone-frame
-            class="absolute start-1/12 -bottom-1/12 w-11/25"
+            class="parallax-far absolute start-1/12 -bottom-1/12 w-11/25"
             src="/images/planifica-tu-vivienda.jpg"
             alt="Sitio de Planifica Tu Vivienda en un celular, con el título «Construye tu casa paso a paso y sin complicaciones»."
             priority
           />
           <app-phone-frame
-            class="absolute end-1/12 top-1/12 w-11/25"
+            class="parallax-near absolute end-1/12 top-1/12 w-11/25"
             src="/images/toastmasters-pachuca.jpg"
             alt="Sitio de Toastmasters Pachuca en un celular, con el título «Voces con poder»."
             priority

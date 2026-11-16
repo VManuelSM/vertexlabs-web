@@ -10,7 +10,7 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@an
   host: {
     type: 'button',
     class:
-      'group flex min-h-14 w-full cursor-pointer items-center gap-4 rounded-md border border-input bg-white px-4 py-3 text-start text-base leading-snug text-navy transition-colors hover:border-navy aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white',
+      'group flex min-h-14 w-full cursor-pointer items-center gap-4 rounded-md border border-input bg-white px-4 py-3 text-start text-base leading-snug text-navy transition hover:border-navy active:scale-98 aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white',
     '[attr.aria-pressed]': 'pressed()',
   },
   template: `

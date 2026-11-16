@@ -8,7 +8,7 @@ import { Heading3 } from '../atoms/text';
   imports: [Icon, Heading3],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'grid content-start gap-3 rounded-md border border-border bg-white p-8',
+    class: 'lift grid content-start gap-3 rounded-md border border-border bg-white p-8',
   },
   template: `
     <app-icon [name]="icon()" class="size-10 text-plum" />

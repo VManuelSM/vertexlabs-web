@@ -17,7 +17,7 @@ import { LinkArrow } from '../atoms/link-arrow';
   selector: 'app-lead-success',
   imports: [CopyText],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'grid gap-2 rounded-md border border-border bg-surface p-6' },
+  host: { class: 'grid animate-enter gap-2 rounded-md border border-border bg-surface p-6' },
   template: `
     <b #title tabindex="-1" class="text-lg outline-none">Listo, {{ name() }}.</b>
     <span><app-copy [value]="note" /></span>
@@ -45,7 +45,10 @@ export class LeadSuccess {
   selector: 'app-lead-failure',
   imports: [CopyText, LinkArrow, WhatsappLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'grid gap-3 rounded-md border-2 border-destructive bg-white p-4', role: 'alert' },
+  host: {
+    class: 'grid animate-enter gap-3 rounded-md border-2 border-destructive bg-white p-4',
+    role: 'alert',
+  },
   template: `
     <p class="flex items-center gap-2 font-semibold text-destructive">
       <span

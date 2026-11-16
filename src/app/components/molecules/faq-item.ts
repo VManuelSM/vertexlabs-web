@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import {
   BrnAccordionContent,
   BrnAccordionHeader,
@@ -24,18 +24,24 @@ import { CopyText } from '../atoms/copy';
       <button
         brnAccordionTrigger
         type="button"
-        class="flex min-h-tap w-full cursor-pointer items-center justify-between gap-4 py-4 text-start font-bold transition-colors hover:text-plum"
+        class="group/faq flex min-h-tap w-full cursor-pointer items-center justify-between gap-4 py-4 text-start font-bold transition-colors hover:text-plum"
+        (click)="touched.set(true)"
       >
         <span>{{ question() }}</span>
-        <span
-          aria-hidden="true"
-          class="w-6 shrink-0 text-center text-h3 leading-none font-normal text-plum"
-          >{{ item.state() === 'open' ? '–' : '+' }}</span
-        >
+        <!-- "+" que gira a "–": la barra vertical rota y se encima en la horizontal. -->
+        <span aria-hidden="true" class="relative grid size-6 shrink-0 place-items-center text-plum">
+          <span class="absolute h-0.5 w-4 rounded-pill bg-current"></span>
+          <span
+            class="absolute h-4 w-0.5 rounded-pill bg-current transition-transform duration-(--motion-base)"
+            [class.rotate-90]="item.state() === 'open'"
+          ></span>
+        </span>
       </button>
     </h3>
     <div brnAccordionContent [class.hidden]="item.state() === 'closed'">
-      <p class="max-w-copy pb-6 text-muted-foreground"><app-copy [value]="answer()" /></p>
+      <p class="max-w-copy pb-6 text-muted-foreground" [class.animate-enter]="touched()">
+        <app-copy [value]="answer()" />
+      </p>
     </div>
   `,
 })
@@ -43,4 +49,6 @@ export class FaqItem {
   readonly question = input.required<string>();
   readonly answer = input.required<Copy>();
   protected readonly item = inject(BrnAccordionItem);
+  /** La respuesta entra con movimiento solo cuando la persona la abre (no al cargar). */
+  protected readonly touched = signal(false);
 }

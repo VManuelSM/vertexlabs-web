@@ -13,6 +13,7 @@ import { HlmButton } from '@ui/button';
 import { planById, priceLine } from '@app/content/plans';
 import { Analytics } from '@app/core/analytics';
 import { WHATSAPP_MESSAGES, WhatsappLink } from '@app/core/whatsapp';
+import { tokenMs } from '@app/core/webgl';
 import { AXES, FOCUS, type FocusKey, type Score } from '@app/diagnostic/axes';
 import { recommend, toScores } from '@app/diagnostic/recommend';
 import { AnswerOption } from '../atoms/answer-option';
@@ -50,7 +51,7 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
     <div class="min-w-0 p-6 sm:p-8 md:col-span-2 md:p-12">
       @if (result(); as r) {
         <div class="grid grid-cols-1 gap-6">
-          <div class="grid items-center gap-6 sm:grid-cols-5 md:block">
+          <div class="grid animate-enter items-center gap-6 sm:grid-cols-5 md:block">
             <div class="grid gap-1 sm:col-span-3">
               <p appEyebrow class="mb-1">Tu resultado</p>
               <h3 appH3 #resultTitle tabindex="-1" class="outline-none">
@@ -63,13 +64,13 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
             <app-radar-chart class="sm:col-span-2 md:hidden" [values]="answers()" grow />
           </div>
           <dl class="grid gap-4">
-            <div>
+            <div class="animate-enter" style="--stagger: 1">
               <dt class="text-xs font-bold tracking-eyebrow text-plum uppercase">
                 Tu prioridad: {{ focus(r.focus).name }}
               </dt>
               <dd class="mt-1">{{ focus(r.focus).line }}</dd>
             </div>
-            <div>
+            <div class="animate-enter" style="--stagger: 2">
               <dt class="text-xs font-bold tracking-eyebrow text-plum uppercase">
                 Lo primero que haríamos
               </dt>
@@ -82,7 +83,7 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
               </dd>
             </div>
             @if (r.best; as best) {
-              <div>
+              <div class="animate-enter" style="--stagger: 3">
                 <dt class="text-xs font-bold tracking-eyebrow text-plum uppercase">
                   Lo que ya tienes bien
                 </dt>
@@ -90,13 +91,13 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
               </div>
             }
             @if (r.next; as next) {
-              <div>
+              <div class="animate-enter" style="--stagger: 4">
                 <dt class="text-xs font-bold tracking-eyebrow text-plum uppercase">Después</dt>
                 <dd class="mt-1">{{ focus(next).name }}.</dd>
               </div>
             }
           </dl>
-          <div class="flex flex-wrap gap-3">
+          <div class="flex animate-enter flex-wrap gap-3" style="--stagger: 5">
             @if (!leadOpen()) {
               <button
                 hlmBtn
@@ -119,6 +120,7 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
           </div>
           @if (leadOpen()) {
             <app-diagnostic-lead-form
+              class="animate-enter"
               [result]="r"
               [summary]="summary()"
               [whatsappMessage]="whatsappMessage()"
@@ -140,20 +142,32 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
             [style.transform]="'scaleX(' + progress() + ')'"
           ></span>
         </div>
-        <h3 appH3 #questionTitle id="q-title" tabindex="-1" class="outline-none">
-          {{ axis().question }}
-        </h3>
-        <div role="group" aria-labelledby="q-title" class="mt-6 grid gap-3">
-          @for (option of axis().options; track $index) {
-            <button
-              appAnswerOption
-              [pressed]="answers()[index()] === $index + 1"
-              (click)="choose($index + 1)"
-            >
-              {{ option }}
-            </button>
-          }
-        </div>
+        <!-- Se vuelve a crear con cada pregunta, para que entre con movimiento. -->
+        @for (current of [axis()]; track current.key) {
+          <h3
+            appH3
+            #questionTitle
+            id="q-title"
+            tabindex="-1"
+            class="outline-none"
+            [class]="enter()"
+          >
+            {{ current.question }}
+          </h3>
+          <div role="group" aria-labelledby="q-title" class="mt-6 grid gap-3">
+            @for (option of current.options; track $index) {
+              <button
+                appAnswerOption
+                [class]="enter()"
+                [style.--stagger]="$index + 1"
+                [pressed]="answers()[index()] === $index + 1"
+                (click)="choose($index + 1)"
+              >
+                {{ option }}
+              </button>
+            }
+          </div>
+        }
         <div class="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
           <button
             hlmBtn
@@ -192,6 +206,17 @@ export class DiagnosticPanel {
   protected readonly done = signal(false);
   protected readonly leadOpen = signal(false);
   protected readonly live = signal('');
+  /** Hacia dónde fue el último cambio de pregunta: 0 al cargar (sin animación de entrada). */
+  private readonly direction = signal<-1 | 0 | 1>(0);
+  /** Pausa breve para que se vea la opción elegida antes de pasar a la siguiente. */
+  protected readonly advancing = signal(false);
+  protected readonly enter = computed(() =>
+    this.direction() === 0
+      ? ''
+      : this.direction() > 0
+        ? 'animate-enter-next'
+        : 'animate-enter-back',
+  );
 
   protected readonly axis = computed(() => AXES[this.index()]);
   protected readonly progress = computed(() => (this.index() + 1) / AXES.length);
@@ -224,24 +249,32 @@ export class DiagnosticPanel {
       this.started = true;
       this.analytics.track('diagnostico_inicio', {});
     }
+    if (this.advancing()) return;
     const i = this.index();
     this.answers.update((list) => list.map((v, j) => (j === i ? (value as Score) : v)));
-    if (i < AXES.length - 1) {
-      this.index.set(i + 1);
-      this.announceQuestion();
-    } else {
-      this.finish();
-    }
+    this.advancing.set(true);
+    setTimeout(() => {
+      this.advancing.set(false);
+      if (i < AXES.length - 1) {
+        this.direction.set(1);
+        this.index.set(i + 1);
+        this.announceQuestion();
+      } else {
+        this.finish();
+      }
+    }, tokenMs('--motion-fast'));
   }
 
   protected back(): void {
-    if (this.index() === 0) return;
+    if (this.index() === 0 || this.advancing()) return;
+    this.direction.set(-1);
     this.index.update((i) => i - 1);
     this.announceQuestion();
   }
 
   protected restart(): void {
     this.answers.set(EMPTY);
+    this.direction.set(-1);
     this.index.set(0);
     this.done.set(false);
     this.leadOpen.set(false);

@@ -6,11 +6,12 @@ import { LinkArrow } from '../atoms/link-arrow';
 import { TextImports } from '../atoms/text';
 import { ProblemCard } from '../molecules/problem-card';
 import { SectionLink } from '@app/core/current-path';
+import { Reveal } from '@app/core/motion';
 
 /** Problemas: tres dolores y el cierre "tiene solución". */
 @Component({
   selector: 'app-problems',
-  imports: [SectionLink, LinkArrow, ProblemCard, SectionHead, TextImports, TrackCta, Wrap],
+  imports: [Reveal, SectionLink, LinkArrow, ProblemCard, SectionHead, TextImports, TrackCta, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="problemas" aria-labelledby="problemas-title" class="py-section">
@@ -23,13 +24,14 @@ import { SectionLink } from '@app/core/current-path';
           @for (problem of problems; track problem.title) {
             <article
               appProblemCard
+              [appReveal]="$index"
               [icon]="problem.icon"
               [heading]="problem.title"
               [text]="problem.text"
             ></article>
           }
         </div>
-        <p class="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+        <p appReveal class="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
           <span>Tiene solución, y no siempre es la más cara.</span>
           <a appLinkArrow appSection="planes" appTrack="problemas">Ver planes y precios</a>
         </p>

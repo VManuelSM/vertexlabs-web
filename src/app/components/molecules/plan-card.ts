@@ -20,7 +20,7 @@ const TONES = {
   imports: [CheckItem, CopyText, Heading3, HlmBadge, HlmButton, Price, WhatsappLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col gap-6 rounded-md border p-8',
+    class: 'lift flex flex-col gap-6 rounded-md border p-8',
     '[class]': 'tone().card',
     '[attr.data-surface]': 'plan().tone === "light" ? null : plan().tone',
   },

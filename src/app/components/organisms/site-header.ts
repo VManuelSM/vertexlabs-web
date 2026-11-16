@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
 import { HlmButton } from '@ui/button';
 import { SectionLink } from '@app/core/current-path';
 import { TrackCta, WHATSAPP_MESSAGES, WhatsappLink } from '@app/core/whatsapp';
@@ -19,7 +26,8 @@ const NAV = [
   imports: [SectionLink, HlmButton, Icon, Logo, TrackCta, WhatsappLink, Wrap],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'sticky top-0 z-(--z-header) block border-b border-border bg-white',
+    class: 'header-shadow sticky top-0 z-(--z-header) block border-b border-border bg-white',
+    '[attr.data-scrolled]': 'scrolled() ? "" : null',
     '(document:keydown.escape)': 'menuOpen.set(false)',
   },
   template: `
@@ -82,7 +90,7 @@ const NAV = [
     <div id="menu-movil" class="border-t border-border bg-white md:hidden" [hidden]="!menuOpen()">
       <ul appWrap class="grid pt-2 pb-4">
         @for (item of nav; track item.id) {
-          <li>
+          <li class="animate-enter" [style.--stagger]="$index">
             <a
               [appSection]="item.id"
               class="block py-3 text-base font-bold"
@@ -99,4 +107,16 @@ export class SiteHeader {
   protected readonly nav = NAV;
   protected readonly messages = WHATSAPP_MESSAGES;
   protected readonly menuOpen = signal(false);
+  /** La sombra del encabezado aparece en cuanto la página se mueve. */
+  protected readonly scrolled = signal(false);
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const update = () => this.scrolled.set(scrollY > 0);
+      update();
+      addEventListener('scroll', update, { passive: true });
+      destroyRef.onDestroy(() => removeEventListener('scroll', update));
+    });
+  }
 }

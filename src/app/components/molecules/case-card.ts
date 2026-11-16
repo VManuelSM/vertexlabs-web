@@ -13,22 +13,22 @@ import { Testimonial } from './testimonial';
   imports: [BrandGradient, CopyText, Heading3, LinkArrow, PhoneFrame, Testimonial],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex min-w-0 flex-col overflow-hidden rounded-md border border-border bg-white',
+    class: 'group/case lift flex min-w-0 flex-col rounded-md border border-border bg-white',
   },
   template: `
     @let study = case();
     @if (study.image; as image) {
-      <div class="relative isolate h-56 overflow-hidden">
+      <div class="relative isolate h-56 overflow-hidden rounded-t-md">
         <app-brand-gradient live />
         <app-phone-frame
-          class="absolute start-1/2 top-6 w-1/2 -translate-x-1/2"
+          class="absolute start-1/2 top-6 w-1/2 -translate-x-1/2 transition-transform duration-(--motion-base) group-hover/case:-translate-y-2 group-hover/case:scale-105"
           [src]="image.src"
           [alt]="image.alt"
         />
       </div>
     } @else {
       <div
-        class="grid h-56 place-items-center border-b-2 border-dashed border-input bg-surface p-4 text-center text-sm font-semibold text-muted-foreground"
+        class="grid h-56 place-items-center rounded-t-md border-b-2 border-dashed border-input bg-surface p-4 text-center text-sm font-semibold text-muted-foreground"
       >
         <p>Captura del proyecto<br />por agregar</p>
       </div>

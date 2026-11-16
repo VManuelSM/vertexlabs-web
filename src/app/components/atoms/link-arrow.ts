@@ -11,15 +11,21 @@ import { Icon, type IconName } from './icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class:
-      'inline-flex min-h-7 cursor-pointer items-center gap-2 border-b-2 border-pink pb-px font-bold text-current transition-colors hover:border-plum',
+      'group/link inline-flex min-h-7 cursor-pointer items-center gap-2 border-b-2 border-pink pb-px font-bold text-current transition-colors hover:border-plum',
   },
   template: `
     @if (icon() === 'back') {
-      <app-icon name="back" class="size-5" />
+      <app-icon
+        name="back"
+        class="size-5 transition-transform duration-(--motion-base) group-hover/link:-translate-x-1"
+      />
     }
     <ng-content />
     @if (icon() !== 'back') {
-      <app-icon [name]="icon()" class="size-5" />
+      <app-icon
+        [name]="icon()"
+        class="size-5 transition-transform duration-(--motion-base) group-hover/link:translate-x-1"
+      />
     }
   `,
 })

@@ -7,6 +7,7 @@ import { Wrap } from '../atoms/layout';
 import { TextImports } from '../atoms/text';
 import { ContactForm } from './contact-form';
 import { SectionLink } from '@app/core/current-path';
+import { Reveal } from '@app/core/motion';
 
 /**
  * Cierre sobre el degradado de marca. El texto va sobre una capa azul marino para quedar siempre
@@ -15,6 +16,7 @@ import { SectionLink } from '@app/core/current-path';
 @Component({
   selector: 'app-closing',
   imports: [
+    Reveal,
     SectionLink,
     BrandGradient,
     ContactForm,
@@ -39,7 +41,7 @@ import { SectionLink } from '@app/core/current-path';
         class="absolute inset-0 -z-10 bg-linear-to-b from-navy/95 via-navy/90 to-plum/70 md:bg-linear-to-r md:from-navy/95 md:via-navy/85 md:to-transparent"
       ></span>
       <div appWrap class="grid items-center gap-12 py-24 md:grid-cols-2 md:gap-16">
-        <div>
+        <div appReveal>
           <p appEyebrow class="mb-4">Empecemos</p>
           <h2 appH2 id="contacto-title">Empieza por saber dónde estás.</h2>
           <p appLead class="mt-4">
@@ -57,11 +59,13 @@ import { SectionLink } from '@app/core/current-path';
           El formulario sale completo en el HTML prerenderizado; su código (Angular Forms) se carga
           al acercarse a la vista. En navegación interna se dibuja en cuanto el navegador está libre.
         -->
-        @defer (on idle; hydrate on viewport) {
-          <app-contact-form />
-        } @placeholder {
-          <div aria-hidden="true" class="min-h-140 rounded-lg bg-white shadow-md"></div>
-        }
+        <div appReveal="1" class="min-w-0">
+          @defer (on idle; hydrate on viewport) {
+            <app-contact-form />
+          } @placeholder {
+            <div aria-hidden="true" class="min-h-140 rounded-lg bg-white shadow-md"></div>
+          }
+        </div>
       </div>
     </section>
   `,
