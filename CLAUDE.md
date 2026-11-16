@@ -55,7 +55,7 @@ con los ejes Presencia / Atención / Ventas / Medición / Operación / Diferenci
 | Componentes | SpartanUI 1.6: brain (npm) + helm generado por el CLI en `src/app/shared/ui`, style mira   |
 | Estilos     | Tailwind 4 vía PostCSS, con los tokens del manual (`src/styles/tokens.css`)                |
 | Tests       | Vitest (`ng test`)                                                                         |
-| Hosting     | `TODO(dato)`: dominio y hosting por decidir (etapa 5)                                      |
+| Hosting     | Cloudflare Workers, archivos estáticos (`wrangler.jsonc`); despliega solo desde `main`     |
 
 ## Estructura
 
