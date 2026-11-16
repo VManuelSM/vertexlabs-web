@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO(dato): agregar "Sitemap: https://[dominio]/sitemap.xml" cuando exista el dominio.
+# /componentes no se bloquea aquí: lleva "noindex" y el buscador tiene que poder leerlo.
