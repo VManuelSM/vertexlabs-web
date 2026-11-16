@@ -50,8 +50,7 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all",
-              "baseHref": "/vertexlabs-web/"
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,

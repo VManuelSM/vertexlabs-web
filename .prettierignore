@@ -1,4 +1,4 @@
 dist
 .angular
+docs
 src/styles/tokens.css
-src/app/shared/ui

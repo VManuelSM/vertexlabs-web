@@ -1,0 +1,8 @@
+/*
+ * Quita la paleta por defecto de Tailwind (red-500, slate-*, black…). Así solo existen los colores
+ * del manual y los semánticos de Spartan que se registran después; `bg-red-500` no genera CSS.
+ * Se importa entre `tailwindcss/theme.css` y el preset de Spartan: el orden importa.
+ */
+@theme {
+  --color-*: initial;
+}

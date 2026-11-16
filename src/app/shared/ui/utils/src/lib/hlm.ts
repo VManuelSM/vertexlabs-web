@@ -9,27 +9,8 @@ import {
   PLATFORM_ID,
   runInInjectionContext,
 } from '@angular/core';
-import tokens from '@shared/tokens/tokens.json';
 import { type ClassValue, clsx } from 'clsx';
-import { extendTailwindMerge } from 'tailwind-merge';
-
-/*
- * Extensión del proyecto: registra la escala de tokens.json para que tailwind-merge resuelva
- * conflictos con ella (p. ej. `font-emphasis` es un peso, no una familia tipográfica).
- */
-const keys = (group: object) => Object.keys(group).filter((key) => !key.startsWith('__'));
-const twMerge = extendTailwindMerge({
-  extend: {
-    theme: {
-      'font-weight': keys(tokens.typography.fontWeight),
-      text: keys(tokens.typography.fluidSize),
-      leading: keys(tokens.typography.lineHeight),
-      tracking: keys(tokens.typography.letterSpacing),
-      shadow: keys(tokens.shadow),
-      blur: keys(tokens.blur),
-    },
-  },
-});
+import { twMerge } from 'tailwind-merge';
 
 export function hlm(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
