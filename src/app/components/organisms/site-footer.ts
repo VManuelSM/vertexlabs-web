@@ -30,7 +30,14 @@ import { SectionLink } from '@app/core/current-path';
           <h2 class="mb-3 text-xs font-bold tracking-eyebrow text-white uppercase">Contacto</h2>
           <ul class="grid gap-2">
             <li>WhatsApp: <app-copy [value]="whatsapp()" /></li>
-            <li>Correo: <app-copy [value]="email()" /></li>
+            <li>
+              Correo:
+              @if (site.email; as email) {
+                <a class="text-white hover:underline" [href]="'mailto:' + email">{{ email }}</a>
+              } @else {
+                <app-copy [value]="pendingEmail" />
+              }
+            </li>
             <li>Pachuca, Hidalgo · Trabajamos con todo México</li>
             <li>Redes: <app-copy [value]="socials" /></li>
           </ul>
@@ -60,15 +67,13 @@ import { SectionLink } from '@app/core/current-path';
   `,
 })
 export class SiteFooter {
-  private readonly site = inject(SITE_CONFIG);
+  protected readonly site = inject(SITE_CONFIG);
 
   protected readonly whatsapp = computed<Copy>(() => {
     const n = this.site.whatsappNumber;
     return n ? `+${n}` : tbd('[número]', 'Pendiente');
   });
-  protected readonly email = computed<Copy>(
-    () => this.site.email ?? tbd('hola@[dominio]', 'Pendiente'),
-  );
+  protected readonly pendingEmail = tbd('hola@[dominio]', 'Pendiente');
   protected readonly legalName = computed<Copy>(
     () => this.site.legalName ?? tbd('[razón social]', 'Pendiente'),
   );

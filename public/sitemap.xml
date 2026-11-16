@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Solo las páginas indexables; /componentes lleva noindex. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://vertexlabs.mx/</loc></url>
+  <url><loc>https://vertexlabs.mx/aviso-de-privacidad</loc></url>
+</urlset>

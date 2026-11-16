@@ -30,7 +30,8 @@ export class Seo {
   private readonly site = inject(SITE_CONFIG);
 
   set(page: PageHead): void {
-    const url = this.site.siteUrl ? `${this.site.siteUrl}${page.path}` : null;
+    // Una página sin indexar no declara URL canónica.
+    const url = this.site.siteUrl && !page.noindex ? `${this.site.siteUrl}${page.path}` : null;
     const image =
       this.site.siteUrl && this.site.shareImage
         ? `${this.site.siteUrl}${this.site.shareImage}`

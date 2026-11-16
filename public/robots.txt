@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# TODO(dato): agregar "Sitemap: https://[dominio]/sitemap.xml" cuando exista el dominio.
+Sitemap: https://vertexlabs.mx/sitemap.xml
 # /componentes no se bloquea aquí: lleva "noindex" y el buscador tiene que poder leerlo.

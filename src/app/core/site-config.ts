@@ -8,9 +8,12 @@ export interface SiteConfig {
   readonly name: string;
   /** TODO(dato): número de WhatsApp Business, solo dígitos con lada de país (52…). */
   readonly whatsappNumber: string | null;
-  /** TODO(dato): correo con dominio propio. */
+  /** Correo de contacto con dominio propio. */
   readonly email: string | null;
-  /** TODO(dato): dominio final, sin barra al final (https://…). */
+  /**
+   * Dominio final, sin barra al final. La versión sin www es la canónica: el hosting debe redirigir
+   * www.vertexlabs.mx hacia aquí (TODO(dato): hosting por decidir, Firebase o Cloudflare).
+   */
   readonly siteUrl: string | null;
   /** TODO(dato): razón social para el pie y el aviso de privacidad. */
   readonly legalName: string | null;
@@ -29,8 +32,8 @@ export interface SiteConfig {
 export const SITE: SiteConfig = {
   name: 'Vertex Labs',
   whatsappNumber: null,
-  email: null,
-  siteUrl: null,
+  email: 'hola@vertexlabs.mx',
+  siteUrl: 'https://vertexlabs.mx',
   legalName: null,
   leadEndpoint: null,
   shareImage: '/og-1200x630.jpg',
