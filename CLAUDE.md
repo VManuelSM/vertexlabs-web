@@ -156,7 +156,7 @@ Las carpetas se crean conforme las pide cada etapa.
   - `badge`: arena con texto azul marino, en mayúsculas; variantes `outline` y `dark`.
   - `input`, `native-select`: campo del manual (48 px, borde azul marino, error en ciruela con borde de
     2 px). `native-select` y `checkbox` dibujan su flecha y su palomita en SVG en línea.
-  - `checkbox`: 24 px, azul marino al marcar. `label`: Semibold de 15 px.
+  - `checkbox`: 24 px, azul marino al marcar y borde ciruela cuando su campo es inválido. `label`: Semibold de 15 px.
   - `field`: el error lleva el ícono "!" del prototipo y no tiñe la etiqueta.
   - `utils/hlm.ts`: tailwind-merge conoce el vocabulario de `styles.css` (sin esto, `text-btn` borraba
     el color de texto del botón principal).

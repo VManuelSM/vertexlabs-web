@@ -79,7 +79,7 @@ export class HlmCheckbox implements ControlValueAccessor {
 
   protected readonly _computedClass = computed(() =>
     hlm(
-      'peer flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm border-2 border-input bg-white text-white transition-colors data-checked:border-navy data-checked:bg-navy data-[matches-spartan-invalid=true]:border-destructive group-has-disabled/field:opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
+      'peer flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm border-2 border-input bg-white text-white transition-colors data-checked:border-navy data-checked:bg-navy data-[matches-spartan-invalid=true]:border-destructive group-data-[matches-spartan-invalid=true]/field:border-destructive group-has-disabled/field:opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
       this.userClass(),
       this._errorStateClass(),
     ),

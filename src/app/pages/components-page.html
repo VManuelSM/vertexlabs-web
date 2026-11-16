@@ -298,4 +298,14 @@
       <article appCaseCard [case]="cases[2]"></article>
     </div>
   </section>
+
+  <section class="grid gap-6 border-t border-border py-8" aria-labelledby="sg-organismos">
+    <h2 appH3 id="sg-organismos">Organismos</h2>
+    <p>Cada organismo es una sección del sitio. Ábrelos en contexto:</p>
+    <div class="flex flex-wrap gap-x-6 gap-y-3">
+      @for (organism of organisms; track organism.fragment) {
+        <a appLinkArrow routerLink="/" [fragment]="organism.fragment">{{ organism.label }}</a>
+      }
+    </div>
+  </section>
 </div>

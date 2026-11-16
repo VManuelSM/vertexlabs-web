@@ -26,7 +26,7 @@ export class TbdMark {
       @if (isTbd(part)) {
         <app-tbd [note]="part.note ?? 'Por confirmar'">{{ part.tbd }}</app-tbd>
       } @else {
-        {{ part }}
+        <ng-container>{{ part }}</ng-container>
       }
     }
   `,

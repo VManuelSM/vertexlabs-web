@@ -114,11 +114,14 @@
   --container-head: 780px;
 }
 
-/* Contenido sobre fondo oscuro (azul marino, ciruela o degradado): se marca con data-surface="dark". */
-@custom-variant on-dark (&:where([data-surface='dark'], [data-surface='dark'] *));
+/*
+ * Contenido sobre fondo oscuro (azul marino, ciruela o degradado): se marca con data-surface="dark".
+ * Una tarjeta blanca dentro (data-surface="light") vuelve al aspecto normal.
+ */
+@custom-variant on-dark (&:where([data-surface='dark'], [data-surface='dark'] *):not(:where([data-surface='light'], [data-surface='light'] *)));
 
 /* Contenido sobre arena (data-surface="sand"): el texto secundario pasa a azul marino. */
-@custom-variant on-sand (&:where([data-surface='sand'], [data-surface='sand'] *));
+@custom-variant on-sand (&:where([data-surface='sand'], [data-surface='sand'] *):not(:where([data-surface='light'], [data-surface='light'] *)));
 
 /*
  * Estados forzados para la página /componentes: data-demo="hover", "focus" o "active" muestra el

@@ -196,6 +196,17 @@ export class ComponentsPage {
   protected readonly firstPlan = planById('empezar');
   protected readonly sampleAxis = AXES[0];
   protected readonly cases = CASES;
+  protected readonly organisms = [
+    { fragment: 'inicio', label: 'Hero' },
+    { fragment: 'problemas', label: 'Problemas' },
+    { fragment: 'planes', label: 'Planes' },
+    { fragment: 'diagnostico', label: 'Diagnóstico' },
+    { fragment: 'casos', label: 'Casos' },
+    { fragment: 'proceso', label: 'Proceso y portal' },
+    { fragment: 'equipo', label: 'Equipo' },
+    { fragment: 'preguntas', label: 'Preguntas' },
+    { fragment: 'contacto', label: 'Cierre' },
+  ] as const;
   protected readonly sampleTbd = tbd('unas 2 semanas');
   protected readonly pendingQuote = tbd('[Cita del cliente, con permiso por escrito]', 'Pendiente');
   protected readonly pendingAuthor = tbd('[Nombre, cargo, negocio]', 'Pendiente');
