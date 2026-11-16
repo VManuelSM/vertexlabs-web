@@ -1,0 +1,12 @@
+// Despliegue en Cloudflare: Workers con archivos estáticos. El sitio es solo HTML/JS prerenderizado
+// (`pnpm build`), sin código de servidor. El dominio vertexlabs.mx se conecta desde el panel una vez
+// que la zona está activa en Cloudflare.
+{
+  "name": "vertexlabs-web",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist/vertexlabs-web/browser",
+    // "/aviso-de-privacidad" se sirve tal cual: la URL canónica no lleva barra al final.
+    "html_handling": "drop-trailing-slash",
+  },
+}
