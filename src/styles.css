@@ -106,6 +106,36 @@
   --default-transition-timing-function: var(--ease);
 }
 
+/* Medidas de línea del prototipo (`max-w-heading`, `max-w-lead`…): el manual no las define. */
+@theme {
+  --container-heading: 24ch;
+  --container-lead: 58ch;
+  --container-copy: 66ch;
+  --container-head: 780px;
+}
+
+/* Contenido sobre fondo oscuro (azul marino, ciruela o degradado): se marca con data-surface="dark". */
+@custom-variant on-dark (&:where([data-surface='dark'], [data-surface='dark'] *));
+
+/* Contenido sobre arena (data-surface="sand"): el texto secundario pasa a azul marino. */
+@custom-variant on-sand (&:where([data-surface='sand'], [data-surface='sand'] *));
+
+/*
+ * Estados forzados para la página /componentes: data-demo="hover", "focus" o "active" muestra el
+ * estado sin interacción. En el resto del sitio estas variantes se comportan como las de Tailwind.
+ */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+  &[data-demo~='hover'] {
+    @slot;
+  }
+}
+@custom-variant active (&:active, &[data-demo~='active']);
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -115,8 +145,14 @@
     @apply bg-background font-sans text-base text-foreground antialiased;
   }
 
-  :focus-visible {
+  :focus-visible,
+  [data-demo~='focus'] {
     outline: none;
     box-shadow: var(--focus-ring);
+  }
+
+  /* Las anclas no quedan debajo del encabezado fijo (68 px de alto). */
+  [id] {
+    scroll-margin-top: calc(var(--tap-min) + var(--space-6));
   }
 }

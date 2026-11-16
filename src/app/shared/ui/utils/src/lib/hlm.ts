@@ -10,7 +10,26 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+/*
+ * Extensión de marca: tailwind-merge conoce el vocabulario de styles.css. Sin esto toma
+ * `text-btn` o `text-h2` por colores y borra el color de texto del botón (p. ej. el blanco del
+ * botón principal), o no resuelve conflictos con `rounded-pill`, `min-h-tap`, etc.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      text: ['h1', 'h2', 'h3', 'btn'],
+      spacing: ['section', 'gutter', 'tap'],
+      radius: ['pill'],
+      leading: ['body'],
+      tracking: ['eyebrow'],
+      shadow: ['focus'],
+      container: ['site', 'heading', 'lead', 'copy', 'head'],
+    },
+  },
+});
 
 export function hlm(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -52,7 +52,7 @@ con los ejes Presencia / Atención / Ventas / Medición / Operación / Diferenci
 | Runtime     | Node 24 (`.nvmrc`), pnpm (versión fijada en `packageManager`)                              |
 | UI          | Angular 21: standalone, signals, zoneless, `OnPush`                                        |
 | Render      | Prerender estático (`outputMode: "static"`): `dist/vertexlabs-web/browser` es solo HTML/JS |
-| Componentes | SpartanUI 1.6: brain (npm) + helm generado por el CLI en `src/app/shared/ui`, style maia   |
+| Componentes | SpartanUI 1.6: brain (npm) + helm generado por el CLI en `src/app/shared/ui`, style mira   |
 | Estilos     | Tailwind 4 vía PostCSS, con los tokens del manual (`src/styles/tokens.css`)                |
 | Tests       | Vitest (`ng test`)                                                                         |
 | Hosting     | `TODO(dato)`: dominio y hosting por decidir (etapa 5)                                      |
@@ -110,6 +110,8 @@ Las carpetas se crean conforme las pide cada etapa.
 | Forma                | `rounded-sm` (4 px), `rounded-md` (8 px), `rounded-lg` (16 px), `rounded-pill`; `shadow-sm`, `shadow-md`, `shadow-focus`                                         |
 | Movimiento           | `transition` (150 ms con la curva del manual), `duration-(--motion-base)`                                                                                        |
 | Cortes               | `sm` 560 · `md` 900 · `lg` 1200 (no existen `xl` ni `2xl`)                                                                                                       |
+| Medidas de línea     | `max-w-heading` (24ch), `max-w-lead` (58ch), `max-w-copy` (66ch), `max-w-head` (780 px): del prototipo, no del manual                                            |
+| Superficie           | `on-dark:` dentro de `data-surface="dark"` (azul marino, ciruela, degradado) y `on-sand:` dentro de `data-surface="sand"`                                        |
 
 - La paleta por defecto de Tailwind está desactivada: `bg-red-500`, `text-black`… no generan CSS.
 - Nada de valores arbitrarios (`[…]`). Para un token sin utilidad propia se usa la sintaxis de
@@ -128,6 +130,10 @@ Las carpetas se crean conforme las pide cada etapa.
   el cierre.
 - Prohibido: cursor personalizado, partículas decorativas, librerías de scroll suavizado (Lenis),
   fotos de banco de imágenes y espacios que dependan de la altura de pantalla (`vh`).
+- `pnpm check:design` revisa el código propio: sin valores arbitrarios, colores a mano, `vh` ni la
+  paleta por defecto.
+- En `/componentes`, `data-demo="hover"`, `"focus"` o `"active"` fuerza ese estado para mostrarlo
+  sin interacción (`styles.css` amplía esas variantes; en el sitio se comportan igual que siempre).
 
 ## SpartanUI
 
@@ -138,10 +144,22 @@ Las carpetas se crean conforme las pide cada etapa.
 - Helm se genera con el CLI en `src/app/shared/ui` y toma la marca de las variables del tema en
   `styles.css`. Extender helm (variantes nuevas) requiere justificación y se anota en la lista de
   abajo.
-- El style maia es muy redondeado (botones `rounded-4xl`) y usa `bg-black/80` en sus capas, que aquí
-  no existe. Al generar un componente se ajustan sus radios y colores a la marca. **Pendiente para la
-  etapa 2:** decidir si se mantiene maia o se cambia el style antes de generar componentes.
-- Extensiones de helm hechas: ninguna todavía.
+- Style **mira** (compacto: botones de 28 px y texto de 12 px). Al generar un componente se ajustan
+  tamaños, radios y colores a la marca. El CLI puede volver a agregar `@ng-icons/*` al generar: no se
+  conserva (el sitio usa su propio set de íconos y SVG en línea).
+- El acordeón de preguntas usa el brain (`@spartan-ng/brain/accordion`) sin helm: el helm anima la
+  altura y el manual solo permite `transform` y `opacity`.
+- Extensiones de helm hechas (etapa 2):
+  - `button`: variantes del manual `primary` (rosa, 56 px, texto de 19 px por contraste), `dark`,
+    `outline`, `light` (sobre fondo oscuro) y `text`; tamaños `default` (44 px), `lg`, `icon` e
+    `inline`; estado `loading` (indicador y `aria-busy`).
+  - `badge`: arena con texto azul marino, en mayúsculas; variantes `outline` y `dark`.
+  - `input`, `native-select`: campo del manual (48 px, borde azul marino, error en ciruela con borde de
+    2 px). `native-select` y `checkbox` dibujan su flecha y su palomita en SVG en línea.
+  - `checkbox`: 24 px, azul marino al marcar. `label`: Semibold de 15 px.
+  - `field`: el error lleva el ícono "!" del prototipo y no tiñe la etiqueta.
+  - `utils/hlm.ts`: tailwind-merge conoce el vocabulario de `styles.css` (sin esto, `text-btn` borraba
+    el color de texto del botón principal).
 
 ## Contraste
 
@@ -262,6 +280,7 @@ pnpm build        # build prerenderizado en dist/vertexlabs-web/browser
 pnpm test         # unitarias (Vitest)
 pnpm typecheck    # tipos de app y pruebas
 pnpm format       # prettier sobre src (respeta .prettierignore)
+pnpm check:design # reglas del manual sobre el código propio
 ```
 
 ## Requiere aprobación de Víctor

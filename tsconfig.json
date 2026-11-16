@@ -13,8 +13,35 @@
     "target": "ES2022",
     "module": "preserve",
     "paths": {
+      "@app/*": [
+        "./src/app/*"
+      ],
       "@ui/utils": [
         "./src/app/shared/ui/utils/src/index.ts"
+      ],
+      "@ui/button": [
+        "./src/app/shared/ui/button/src/index.ts"
+      ],
+      "@ui/badge": [
+        "./src/app/shared/ui/badge/src/index.ts"
+      ],
+      "@ui/input": [
+        "./src/app/shared/ui/input/src/index.ts"
+      ],
+      "@ui/label": [
+        "./src/app/shared/ui/label/src/index.ts"
+      ],
+      "@ui/checkbox": [
+        "./src/app/shared/ui/checkbox/src/index.ts"
+      ],
+      "@ui/native-select": [
+        "./src/app/shared/ui/native-select/src/index.ts"
+      ],
+      "@ui/field": [
+        "./src/app/shared/ui/field/src/index.ts"
+      ],
+      "@ui/separator": [
+        "./src/app/shared/ui/separator/src/index.ts"
       ]
     }
   },
