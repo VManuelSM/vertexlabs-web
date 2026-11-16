@@ -20,7 +20,6 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@an
       height="668"
       [alt]="alt()"
       [priority]="priority()"
-      sizes="(min-width: 900px) 260px, 45vw"
     />
   `,
 })
